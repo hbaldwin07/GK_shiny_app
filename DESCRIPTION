@@ -1,0 +1,31 @@
+Package: svm2
+Title: PKG_TITLE
+Version: 0.0.0.9000
+Authors@R: person('AUTHOR_FIRST', 'AUTHOR_LAST', email = 'AUTHOR@MAIL.COM', role = c('cre', 'aut'))
+Description: PKG_DESC.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    shiny,
+    golem,
+    processx,
+    attempt,
+    DT,
+    glue,
+    htmltools,
+    BiocManager,
+    yaImpute,
+    EBImage,
+    shinycssloaders,
+    shinyDirectoryInput (>= 0.2.0),
+    shinyjs,
+    e1071
+RoxygenNote: 7.0.2
+Suggests: 
+    testthat (>= 2.1.0),
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+Remotes:  
+    wleepang/shiny-directory-input

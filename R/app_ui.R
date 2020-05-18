@@ -1,0 +1,96 @@
+#' @import shiny
+#' @import EBImage
+app_ui <- function() {
+  tagList(
+    # Leave this function for adding external resources
+    golem_add_external_resources(),
+    # List the first level UI elements here 
+    fluidPage(
+      h1("svm2"),
+      tabsetPanel(
+        tabPanel("Image Setup",
+                 sidebarLayout(
+                   sidebarPanel(
+                     mod_img_dir_ui("img_dir_ui_1"),
+                     actionButton("reset_input","Reset inputs"),
+                     h4("Choose Channel Inputs"),
+                     mod_select_ch_ui("select_ch_ui_1")
+                   ),
+                   mainPanel(
+                     #textOutput("test")
+                     tabsetPanel(
+                       tabPanel("Channel 1", mod_display_ch_ui("display_ch_ui_1")),
+                       tabPanel("Channel 2", mod_display_ch_ui("display_ch_ui_2")),
+                       tabPanel("Channel 3", mod_display_ch_ui("display_ch_ui_3")),
+                       tabPanel("Channel 4", mod_display_ch_ui("display_ch_ui_4"))
+                     )
+                   )
+                 )),
+        tabPanel("Image Segmentation",
+                 tabsetPanel(
+                   tabPanel("Nucleus Segmentation",
+                            sidebarLayout(
+                              sidebarPanel(
+                                mod_nuc_params_ui("nuc_params_ui_1")
+                              ),
+                              mainPanel(
+                                #textOutput("test")
+                                mod_n_segment_ui("n_segment_ui_1")
+                              )
+                            )),
+                   tabPanel( "Phenotype Segmentation",
+                             sidebarLayout(
+                               sidebarPanel(
+                                 mod_ph_params_ui("ph_params_ui_1")
+                               ),
+                               mainPanel(
+                                 mod_ph_segment_ui("ph_segment_ui_1")
+                               )
+                             )
+                   ),
+                   tabPanel("Save Image Parameters",
+                            mod_dl_params_ui("dl_params_ui_1")
+                   )
+                 )
+        ), 
+        tabPanel("Image Classification",
+                 tabsetPanel(
+                   tabPanel("Positive",
+                            sidebarLayout(
+                              sidebarPanel(actionButton(("button"), label="Load Image"),
+                                           sliderInput(("int"), "Image Intensity:",1,500,100, step=5)),
+                              mainPanel(
+                                downloadButton(("dl_training_P"), label="Save File"),
+                                uiOutput("pos_class_ui"))
+                            )),
+                   tabPanel("Negative",
+                            sidebarLayout(
+                              sidebarPanel(actionButton(("button_n"), label="Load Image"),
+                                           sliderInput(("int"), "Image Intensity:",1,500,100, step=5)),
+                              mainPanel(
+                                uiOutput("neg_class_ui"))
+                            ))
+                 )
+    )
+    )
+    )
+  )
+}
+
+
+#' @import shiny
+golem_add_external_resources <- function(){
+  
+  addResourcePath(
+    'www', system.file('app/www', package = 'svm2')
+  )
+ 
+  tags$head(
+    golem::activate_js(),
+    golem::favicon()
+    # Add here all the external resources
+    # If you have a custom.css in the inst/app/www
+    # Or for example, you can add shinyalert::useShinyalert() here
+    #tags$link(rel="stylesheet", type="text/css", href="www/custom.css")
+  )
+}
