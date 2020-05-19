@@ -17,7 +17,7 @@ mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
     h4(textOutput(ns("text"))),
-    actionButton(ns("save"), label="Save Data"),
+    actionButton(ns("save"), label="Save Image Data"),
     br(),
     plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px")
     # fluidRow(

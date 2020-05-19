@@ -59,7 +59,7 @@ app_ui <- function() {
                             sidebarLayout(
                               sidebarPanel(actionButton(("button"), label="Load Image"),
                                            sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                                           downloadButton(("dl_training_P"), label="Save File")),
+                                           downloadButton(("dl_training_P"), label="Save Classification File")),
                               mainPanel(
                                 uiOutput("pos_class_ui"))
                             )),
@@ -67,13 +67,33 @@ app_ui <- function() {
                             sidebarLayout(
                               sidebarPanel(actionButton(("button_n"), label="Load Image"),
                                            sliderInput(("int"), "Image Intensity:",1,500,100, step=5), 
-                                           downloadButton(("dl_training_N"), label="Save File")),
+                                           downloadButton(("dl_training_N"), label="Save Classification File")),
                               mainPanel(
                                 uiOutput("neg_class_ui"))
                             ))
+                 )),
+        tabPanel("Create Model", 
+                 fluidRow(
+                   mod_cmodel_dir_ui("cmodel_dir_ui_1")
+                 ),
+                 fluidRow(
+                   mod_create_model_ui("create_model_ui_1")
                  )
-    )
-    )
+        )
+        
+        
+        #,
+        # tabPanel("Test Maodel",
+        #          sidebarLayout(
+        #            sidebarPanel(
+        #              h4("Choose Test Image"),
+        #              #mod_load_img_ui("load_img_ui_2")
+        #            ),
+        #            mainPanel(
+        #              mod_test_model_ui("test_model_ui_1")
+        #            )
+        #          ))
+      )
     )
   )
 }
@@ -85,7 +105,7 @@ golem_add_external_resources <- function(){
   addResourcePath(
     'www', system.file('app/www', package = 'svm2')
   )
- 
+  
   tags$head(
     golem::activate_js(),
     golem::favicon()

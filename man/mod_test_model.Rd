@@ -7,7 +7,7 @@
 \usage{
 mod_test_model_ui(id)
 
-mod_test_model_server(input, output, session)
+mod_test_model_server(input, output, session, r)
 }
 \arguments{
 \item{id}{shiny id}

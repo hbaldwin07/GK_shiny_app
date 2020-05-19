@@ -20,7 +20,7 @@ golem::fill_desc(
 
 ## Use this desc to set {golem} options
 
-# golem::set_golem_options()
+golem::set_golem_options()
 # 
 # ## 1.2 - Set common Files 
 # ## 

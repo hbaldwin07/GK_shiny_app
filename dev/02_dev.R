@@ -22,8 +22,8 @@
 #golem::add_module( name = "norm_ch")
 #golem::add_module(name="classify")
 #golem::add_module(name="img_dir")
-golem::add_module(name="classify_loop")
-
+#golem::add_module(name="create_model")
+golem::add_module(name="cmodel_dir")
 
 ## 2.2 Add dependencies
 usethis::use_package( "BiocManager" )
@@ -50,9 +50,9 @@ golem::browser_button()
 
 ## 2.5 Add external files
 
-#golem::add_js_file( "script" )
-#golem::add_js_handler( "handlers" )
-#golem::add_css_file( "custom" )
+golem::add_js_file( "script" )
+golem::add_js_handler( "handlers" )
+golem::add_css_file( "custom" )
 
 # 3. Documentation
 
@@ -62,9 +62,9 @@ devtools::build_vignettes()
 
 ## 3.2 Code coverage
 ## You'll need GitHub there
-# usethis::use_github()
-# usethis::use_travis()
-# usethis::use_appveyor()
+usethis::use_github()
+#usethis::use_travis()
+#usethis::use_appveyor()
 
 # You're now set! 
 # go to dev/03_deploy.R

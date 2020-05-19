@@ -29,21 +29,6 @@ mod_img_dir_ui <- function(id){
 mod_img_dir_server <- function(input, output, session, r){
   ns <- session$ns
 
-#   eventReactive(
-#     ignoreNULL = TRUE,
-#     eventExpr = {
-#       input$directory
-#     },
-#     valueExpr = {
-#       if (input$directory > 0) {
-#         path = shinyDirectoryInput::choose.dir(default = shinyDirectoryInput::readDirectoryInput(session, 'directory'), useNew=TRUE)
-#         shinyDirectoryInput::updateDirectoryInput(session, 'directory', value = path)
-#         files = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
-#       }
-#     }
-#   )
-# }
-#   
   ##DEV MODE ONLY##
   r$img_dir = reactiveValues()
   observe({
@@ -59,11 +44,6 @@ mod_img_dir_server <- function(input, output, session, r){
   #       path = shinyDirectoryInput::choose.dir(default=shinyDirectoryInput::readDirectoryInput(session, "directory"))
   #       shinyDirectoryInput::updateDirectoryInput(session, 'directory', value = path)
   #       r$img_dir$path = path
-  #       # filenames = reactive({
-  #       #   tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
-  #       #   filenames = tifs
-  #       # })
-  #       # files = filenames()
   #     }
   #   }
   #   )

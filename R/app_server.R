@@ -21,20 +21,19 @@ app_server <- function(input, output,session) {
   pheno_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_2", img=img1(), n=reactive(r$mod3$GFP), r)})
   callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)
   nseg1 <- reactive({callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
-  callModule(mod_dl_params_server, "mod_dl_params_ui_1", r)
+  #callModule(mod_dl_params_server, "mod_dl_params_ui_1", r)
   callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(r$mod6), nseg=nseg1(), r)
   callModule(mod_dl_params_server, "dl_params_ui_1", r)
   
-  #callModule(mod_classify_loop_server, "classify_loop_ui_1", r)
-  #callModule(mod_classify_loop_server, "classify_loop_ui_1", classify=reactive("pos"), r)
-  #callModule(mod_classify_loop_server, "classify_loop_ui_2", classify=reactive("neg"), r)
+  callModule(mod_cmodel_dir_server, "cmodel_dir_ui_1", r)
+  model <- reactive({callModule(mod_create_model_server, "create_model_ui_1", r)})
+  callModule(mod_create_model_server, "create_model_ui_1", r)
  
   filenames = reactive({
     path = r$img_dir$path
     tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
     filenames= as.list(tifs)
   })
-  
   observe({
     r$classify_input_int = input$int
   })
@@ -58,7 +57,6 @@ app_server <- function(input, output,session) {
       values$data <- rbind(values$data, table())
     })
   })
-  
   observeEvent(input$button_n, {
     count <<- count + 1
     if (count <= length(filenames())) {
@@ -81,7 +79,6 @@ app_server <- function(input, output,session) {
     cseg = reactive({callModule(mod_ph_segment_server, "temp", ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
     callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"), ix=reactive(i))
   }
-  
   loop2 <- function(i) {
     img = reactive({callModule(mod_load_img_server, "temp", ix=reactive(i), r=r)})
     dapi = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$DAPI), r=r)})
@@ -109,6 +106,10 @@ app_server <- function(input, output,session) {
       saveRDS(table2, file=file)
     }
   )
+  
+  
+  #callModule(mod_test_model_server, "test_model_1", r)
+  
    
 }
 
