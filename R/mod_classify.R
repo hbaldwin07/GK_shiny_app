@@ -22,9 +22,10 @@ mod_classify_ui <- function(id){
     #   )
     # ),
     fluidRow(
-      actionButton(ns("save"), label="Save Data"),
-      plotOutput(ns("image"), click=ns("plot_click"))
-      )
+      actionButton(ns("save"), label="Save Data")),
+    
+    fluidRow(
+      plotOutput(ns("image"), click=ns("plot_click")))
     
     # sidebarLayout(
     #   sidebarPanel(
@@ -89,7 +90,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     )
     axis(1)
     axis(2)
-    grid(10, 10, col="black")
+    #grid(10, 10, col="black")
     box()
     plot(seg_out())
     points(source_coords$xy[1], source_coords$xy[2], cex=3, pch=intToUtf8(8962))
