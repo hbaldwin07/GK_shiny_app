@@ -59,15 +59,16 @@ app_ui <- function() {
                             sidebarLayout(
                               sidebarPanel(actionButton(("button"), label="Load Image"),
                                            sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                                           downloadButton(("dl_training_P"), label="Save File"),
+                                           downloadButton(("dl_training_P"), label="Save File")),
                               mainPanel(
                                 uiOutput("pos_class_ui"))
                             )),
                    tabPanel("Negative",
                             sidebarLayout(
                               sidebarPanel(actionButton(("button_n"), label="Load Image"),
-                                           sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                                           downloadButton(("dl_training_P"), label="Save File")),
+                                           sliderInput(("int"), "Image Intensity:",1,500,100, step=5), 
+                                           downloadButton(("dl_training_N"), label="Save File")),
+                              mainPanel(
                                 uiOutput("neg_class_ui"))
                             ))
                  )

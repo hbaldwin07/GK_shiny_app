@@ -16,25 +16,11 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    # fluidRow(column(12,
-    #          sliderInput(ns("int"), "Image Intensity:",1,500,100, step=5),
-    #          downloadButton(ns("dl_training"), label=textOutput(ns("text")))
-    #   )
-    # ),
     fluidRow(
       actionButton(ns("save"), label="Save Data")),
-    
     fluidRow(
       plotOutput(ns("image"), click=ns("plot_click")))
-    
-    # sidebarLayout(
-    #   sidebarPanel(
-    #     downloadButton(ns("dl_training"), label="Save")
-    #   ),
-    #   mainPanel(
-    #     plotOutput(ns("image"), click=ns("plot_click"))
-    #   )
-    # )
+
   )
 }
     
