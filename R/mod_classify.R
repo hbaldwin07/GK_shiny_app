@@ -16,11 +16,18 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fluidRow(
-      actionButton(ns("save"), label="Save Data")),
-    fluidRow(
-      plotOutput(ns("image"), click=ns("plot_click")))
-
+    h4(textOutput(ns("text"))),
+    actionButton(ns("save"), label="Save Data"),
+    br(),
+    plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px")
+    # fluidRow(
+    #   actionButton(ns("save"), label="Save Data")),
+    # 
+    # fluidRow(style = "margin: 15px;",
+    #          column(12,
+    #                 h4(textOutput(ns("text"))),
+    #                 plotOutput(ns("image"), click=ns("plot_click"), width="1000px", height="1000px")
+    #                 ))
   )
 }
     
@@ -32,13 +39,13 @@ mod_classify_ui <- function(id){
     
 mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify, ix){
   ns <- session$ns
-  # output$text <- renderText({
-  #   if (classify()=="pos") {
-  #     text = "Download Positive Examples"
-  #   } else {
-  #     text = "Download Negative Examples"
-  #   }
-  # })
+  output$text <- renderText({
+    if (classify()=="pos") {
+      text = "Download Positive Examples"
+    } else {
+      text = "Download Negative Examples"
+    }
+  })
   
   # output$text2 <- renderText({
   #   if (classify()=="pos") {
@@ -76,7 +83,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     )
     axis(1)
     axis(2)
-    #grid(10, 10, col="black")
+    grid(10, 10, col="black")
     box()
     plot(seg_out())
     points(source_coords$xy[1], source_coords$xy[2], cex=3, pch=intToUtf8(8962))
