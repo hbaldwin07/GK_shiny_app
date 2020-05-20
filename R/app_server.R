@@ -2,6 +2,7 @@
 #' @import EBImage
 app_server <- function(input, output,session) {
   # List the first level callModules here
+  options(shiny.maxRequestSize=30*1024^2)
   observeEvent(input$reset_input,{
     shinyjs::reset("side-panel")
   })

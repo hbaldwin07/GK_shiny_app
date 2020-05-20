@@ -25,8 +25,7 @@ mod_create_model_ui <- function(id){
            downloadButton(ns("model"), "Save model file")),
     column(9,
            h4("PCA Plot"),
-           plotOutput(ns("PCA"), width="100%", height="100%")) 
-                      #, height="800px"))
+           plotOutput(ns("PCA"), width="100%", height="800px"))
   )
 }
     
