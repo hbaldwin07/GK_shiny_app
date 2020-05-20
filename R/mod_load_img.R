@@ -31,7 +31,6 @@ mod_load_img_server <- function(input, output, session, r, ix){
     path = r$img_dir$path
   })
   f = reactive({
-    #tifs <-dir(path())[grep(".tif",dir(path()))] 
     tifs = dir(paste0(path())[grep(".tif", dir(paste0(path())))])
     f = tifs
   })

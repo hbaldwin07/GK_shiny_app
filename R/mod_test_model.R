@@ -16,13 +16,22 @@
 mod_test_model_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fileInput(ns("rds_file"), label=h4("Load the RDS file")),
-    fileInput(ns("csv_file"), label=h4("Load the parameter (csv) file")),
-    downloadButton(ns("parameters"), "Get Image Settings"), 
-    #fileInput(ns("image_new"), "Load image: test model"),
-    sliderInput(ns("dv"), "SVM Decision Value", -5, 5, 0, step=0.1),
-    sliderInput(ns("int"), "Image intensity:", 1, 1000, 10, step=1),
-    plotOutput(ns("img_test"))
+    sidebarLayout(
+      sidebarPanel(
+        fileInput(ns("test_img"), label="Choose Test Image"),
+        selectInput(ns("DAPI"), label="Dapi Channel?",  c("ch1", "ch2", "ch3", "ch4")), 
+        selectInput(ns("GFP"), label="Phenotype Channel?", c("ch1", "ch2", "ch3", "ch4")),
+        fileInput(ns("rds_file"), label=("Load the RDS file")),
+        fileInput(ns("csv_file"), label=("Load the parameter (csv) file")),
+        downloadButton(ns("parameters"), "Get Image Settings"), 
+        #fileInput(ns("image_new"), "Load image: test model"),
+        sliderInput(ns("dv"), label="SVM Decision Value", -5, 5, 0, step=0.1),
+        sliderInput(ns("int"), label="Image intensity:", 1, 1000, 10, step=1)
+      ),
+      mainPanel(
+        plotOutput(ns("model_img"))
+      )
+    )
   )
 }
     
@@ -34,6 +43,12 @@ mod_test_model_ui <- function(id){
     
 mod_test_model_server <- function(input, output, session, r){
   ns <- session$ns
+  
+  r$test_mod <- reactiveValues()
+  observe({
+    r$test_mod$DAPI <- input$DAPI
+    r$test_mod$GFP <- input$GFP})
+  
   mymodel <- reactive({
     m <- input$rds_file
     if (is.null(m))
@@ -41,17 +56,23 @@ mod_test_model_server <- function(input, output, session, r){
     mymodel <- readRDS(m$datapath)
   })
   img <- reactive({
-    f <- r$file
+    f <- input$test_img
     if (is.null(f))
       return(NULL)
     readImage(f$datapath, all=T)
   })
+  
   param.set <- reactive({
     df.parameter <- input$csv_file
     if (is.null(df.parameter))
       return(NULL)
     parameter.set <- read.csv(df.parameter$datapath, stringsAsFactors = F)
   })
+  
+  dapi_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_a", img=img(), n=reactive(r$test_mod$DAPI), r)})
+  pheno_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_b", img=img(), n=reactive(r$test_mod$GFP), r)})
+  nseg = reactive({callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
+  cseg = reactive({callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(r$mod6), nseg=nseg1(), r)})
   
   imageAnalysis.list <- reactive({
     ll.temp <- list()

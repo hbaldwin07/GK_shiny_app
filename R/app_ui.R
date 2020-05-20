@@ -79,20 +79,10 @@ app_ui <- function() {
                  fluidRow(
                    mod_create_model_ui("create_model_ui_1")
                  )
-        )
-        
-        
-        #,
-        # tabPanel("Test Maodel",
-        #          sidebarLayout(
-        #            sidebarPanel(
-        #              h4("Choose Test Image"),
-        #              #mod_load_img_ui("load_img_ui_2")
-        #            ),
-        #            mainPanel(
-        #              mod_test_model_ui("test_model_ui_1")
-        #            )
-        #          ))
+        ),
+        tabPanel("Test Model",
+                 mod_test_model_ui("test_model_ui_1")
+                 )
       )
     )
   )
