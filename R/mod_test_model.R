@@ -81,8 +81,52 @@ mod_test_model_server <- function(input, output, session, r){
     dapi_norm = callModule(mod_norm_ch_server, "norm_ch_ui_a", img=img(), n=reactive(params$DAPI), r)
     pheno_norm = callModule(mod_norm_ch_server, "norm_ch_ui_b", img=img(), n=reactive(params$GFP), r)
     nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=dapi_norm(), params=reactive(params), r)
-    cseg = callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(params), nseg=nseg1(), r)
-    
+    #cseg = callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(params), nseg=nseg1(), r)
+    int.dapi = computeFeatures.basic(nseg, dapi_norm)
+    y=which(scores(int.dapi[,1], type="z", prob=0.95))
+    tp = as.numeric(attr(y, "names"))
+    nseg2 = rmObjects(nseg, tp)
+    df = as.data.frame(computeFeatures.shape(nseg2))
+    xy = computeFeatures.moment(nseg1)[,c("m.cx", "m.cy")]
+    df = cbind(df, xy)
+    df2 = as.data.frame(matrix(0, nrow(xy), 5))
+    colnames(df2) = c("x", "y", "area_real", "area_circ", "ratio")
+    df2$x = xy[,1]
+    df2$y = xy[,2]
+    df2$area_real = df[,1]
+    df2$area_circ = pi*(df[,3])^2
+    df2$ratio = df2[,4]/df[,1]
+    nr = which(df2[,5]>1)
+    new_seg = rmObjects(nseg2, nr)
+    cseg = callModule(mod_ph_segment_server, "ph_segment_ui_a", ph_norm=pheno_norm(), params=reactive(params), nseg=reactive(new_seg), r)
+    table_test_shape = computeFeatures.shape(cseg,pheno_norm)
+    table_test_moment = computeFeatures.moment(cseg,pheno_norm)
+    table_test_basic = computeFeatures.basic(cseg,pheno_norm)
+    table_test= data.frame(cbind(table_test_basic,table_test_moment,table_test_shape))
+    rownametable= row.names(table_test)
+    table_test= data.frame(cbind(rownametable,table_test))
+    Ts.mix = table_test[,2:12]
+    rownametable2 = table_test[,1]
+    ll.temp$Ts.mix = Ts.mix
+    ll.temp$table_test = table_test
+    ll.temp$rownameTable = rownametable2
+    ll.temp$new_seg = new_seg
+    ll.temp$ph_norm = pheno_norm
+    ll.temp$cseg = cseg
+    ll.temp$xy = xy
+    imageAnalysis.list = ll.temp
+  })
+  cseg_pos = reactive({
+    ll.temp = list()
+    imglist = imageAnalysis.list()
+    Ts.mix = imglist$Ts.mix
+    table_test = imglist$table_test
+    rownameTable = imglist$rownameTable
+    cseg = imglist$cseg
+    ph_n = imglist$ph_norm
+    y.pred = predict(mymodel(), Ts.mix, decision.values=T)
+    length(y.pred)
+    d = attr(y.pred, "decision.values")
   })
   
 }
