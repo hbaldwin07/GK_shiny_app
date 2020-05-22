@@ -27,10 +27,12 @@ app_server <- function(input, output,session) {
   callModule(mod_dl_params_server, "dl_params_ui_1", r)
   
   callModule(mod_cmodel_dir_server, "cmodel_dir_ui_1", r)
-  #model <- reactive({callModule(mod_create_model_server, "create_model_ui_1", r)})
   callModule(mod_create_model_server, "create_model_ui_1", r)
   callModule(mod_test_model_server, "test_model_ui_1", r)
  
+  
+  
+  
   filenames = reactive({
     path = r$img_dir$path
     tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])

@@ -28,17 +28,26 @@ mod_norm_ch_ui <- function(id){
     
 mod_norm_ch_server <- function(input, output, session, n, img, r){
   ns <- session$ns
+  
   index <- reactive({
-    N_ch <- n()
-    if (N_ch  == "ch1") {index = 1}
-    else if (N_ch  == "ch2") {
-      index = 2}
-    else if (N_ch == "ch3") {index=3} else {index=4}
-    index = as.numeric(index)
+    req(n())
+    N_ch = n()
+    if (N_ch == "ch1") {
+      x = 1
+    } else if (N_ch == "ch2") {
+      x = 2
+    } else if (N_ch == "ch3") {
+      x = 3
+    } else {
+      x = 4
+    }
+    index = as.numeric(x)
   })
   ch_normal <- reactive({
+    req(img())
     size = as.numeric(dim(img()))
     ch<-img()[1:size[1],1:size[2],index()]
+    #ch <- img()[,,index()]
     min<-min(as.vector(ch))
     max<-max(as.vector(ch))
     chn<-normalize(ch, ft=c(0,1),c(min,max))
