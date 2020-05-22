@@ -19,15 +19,13 @@ mod_test_model_ui <- function(id){
     sidebarLayout(
       sidebarPanel(
         fileInput(ns("test_img"), label="Choose Test Image"),
-        # selectInput(ns("DAPI"), label="Dapi Channel?",  c("ch1", "ch2", "ch3", "ch4")), 
-        # selectInput(ns("GFP"), label="Phenotype Channel?", c("ch1", "ch2", "ch3", "ch4")),
         fileInput(ns("rds_file"), label=("Load the RDS file")),
         fileInput(ns("csv_file"), label=("Load the parameter (csv) file")),
         #actionButton(ns("img_button"), label="Show Image"),
         downloadButton(ns("parameters"), "Get Image Settings"), 
         #fileInput(ns("image_new"), "Load image: test model"),
         sliderInput(ns("dv"), label="SVM Decision Value", -5, 5, 0, step=0.1),
-        sliderInput(ns("int"), label="Image intensity:", 1, 1000, 10, step=1)
+        sliderInput(ns("int"), label="Image intensity:", 1, 100, 5, step=1)
       ),
       mainPanel(
         plotOutput(ns("model_img"))
@@ -105,10 +103,68 @@ mod_test_model_server <- function(input, output, session, r){
     new_seg = rmObjects(nseg2, nr)
   })
   
-  output$model_img = renderPlot({
-    browser()
-    plot(ph_norm())
+  new_cseg = callModule(mod_ph_segment_server, "ph_segment_ui_a", ph_norm=reactive(ph_norm()), params=reactive(param()), nseg=reactive(new_nseg()), r)
+
+  table_test =  reactive({
+    table_test_shape = computeFeatures.shape(new_cseg(),ph_norm())
+    table_test_moment = computeFeatures.moment(new_cseg(),ph_norm())
+    table_test_basic = computeFeatures.basic(new_cseg(),ph_norm())
+    table_test= data.frame(cbind(table_test_basic,table_test_moment,table_test_shape))
   })
+  
+  var.list = reactive({
+    ll.temp = list()
+    rownametable= row.names(table_test())
+    table_test= data.frame(cbind(rownametable,table_test()))
+    Ts.mix = table_test[,2:12]
+    rownametable2 = table_test[,1]
+    xy = computeFeatures.moment(new_cseg())[,c("m.cx", "m.cy")]
+    ll.temp$Ts.mix = Ts.mix
+    ll.temp$table_test = table_test
+    ll.temp$rownameTable = rownametable2
+    ll.temp$new_seg = new_nseg()
+    ll.temp$ph_norm = ph_norm()
+    ll.temp$cseg = new_cseg()
+    ll.temp$xy = xy
+    var.list = ll.temp
+  })
+  
+  cseg_pos = reactive({
+    ll.temp = list()
+    imglist = var.list()
+    Ts.mix = imglist$Ts.mix
+    table_test = imglist$table_test
+    rownameTable = imglist$rownameTable
+    cseg = imglist$cseg
+    ph_n = imglist$ph_norm
+    y.pred = predict(mymodel(), Ts.mix, decision.values=T)
+    length(y.pred)
+    d = attr(y.pred, "decision.values")
+    new.y.pred = rep("P", length(y.pred))
+    new_cutoff = input$dv
+    new.y.pred[d>new_cutoff]="N"
+    length(new.y.pred)
+    d = round(d, 1)
+    Ts.mix$pred = as.array(new.y.pred)
+    Ts.mix = Ts.mix[1:length(table_test[,1]),]
+    Ts.mix$rownameTable = rownameTable
+    nr = which(Ts.mix$pred %in% "P")
+    seg_pos = rmObjects(cseg, nr)
+    ll.temp$segpos = seg_pos
+    cseg_pos = ll.temp
+  })
+  pos_out = reactive({
+    seg_selected = cseg_pos()$segpos
+    ph_n = var.list()$ph_norm
+    pos_out = paintObjects(seg_selected, toRGB(ph_n*input$int), opac=c(1,0.8),col=c("Green",NA),thick=TRUE,closed=FALSE)
+  })
+  
+  output$model_img = renderPlot({
+    #browser()
+    plot(pos_out())
+  })
+  
+  
 
 
   # 
@@ -143,22 +199,7 @@ mod_test_model_server <- function(input, output, session, r){
   #   table_test= data.frame(cbind(table_test_basic,table_test_moment,table_test_shape))
   # })
   # 
-  # var.list = reactive({
-  #   ll.temp = list()
-  #   rownametable= row.names(table_test())
-  #   table_test= data.frame(cbind(rownametable,table_test()))
-  #   Ts.mix = table_test[,2:12]
-  #   rownametable2 = table_test[,1]
-  #   xy = computeFeatures.moment(new_cseg())[,c("m.cx", "m.cy")]
-  #   ll.temp$Ts.mix = Ts.mix
-  #   ll.temp$table_test = table_test
-  #   ll.temp$rownameTable = rownametable2
-  #   ll.temp$new_seg = new_nseg()
-  #   ll.temp$ph_norm = pheno_norm()
-  #   ll.temp$cseg = new_cseg()
-  #   ll.temp$xy = xy
-  #   var.list = ll.temp
-  # })
+
   # 
   # cseg_pos = reactive({
   #   ll.temp = list()
