@@ -17,12 +17,8 @@ mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
     h4(textOutput(ns("text2"))),
-    #actionButton(ns("save"), label="Save Image Data"),
     br(),
-    fluidRow(
-      textOutput(ns("text")),
-      plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px")
-    )
+    fluidRow(plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
   )
 }
     
@@ -109,21 +105,28 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   modvalues <- reactiveValues(new_rows=NULL)
   count = 0
   
+  # n_classified = reactive({
+  #   total = nrow(rds_training())
+  #   n_c = which(rds_training()$predict == 0)
+  #   n_classified = total-length(n_c)
+  # })
+  # 
+  # observeEvent(r$button, {
+  #   count <<- count + 1
+  #   if (count > 1) {
+  #     output$text = renderText({
+  #       text = paste0("# cells selected: ", n_classified())
+  #     }) 
+  #   }
+  # })
+
   observeEvent(r$button, {
     count <<- count + 1
     if (count > 1) {
       modvalues$new_rows <- data.frame(rds_training())
-      n_classified = reactive({
-        total = nrow(rds_training())
-        n_c = which(rds_training()$predict == 0)
-        n_classified = total-length(n_c)
-      })
-      output$text = renderText({
-        browser()
-        text = paste0("# cells selected: ", n_classified())
-      })
     }
   })
+  
   return(reactive({modvalues$new_rows}))
   
   # output$table = renderTable({

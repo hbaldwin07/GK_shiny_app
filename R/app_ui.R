@@ -57,10 +57,18 @@ app_ui <- function() {
                    tabPanel("Positive",
                             sidebarLayout(
                               sidebarPanel(
-                                #actionButton(("button"), label="Load Image"),
                                 actionButton(("button"), label="Load Image / Save"),
                                 sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                                downloadButton(("dl_training_P"), label="Save Classification File")),
+                                downloadButton(("dl_training_P"), 
+                                               label="Save Classification File"),
+                                HTML('<script type="text/javascript">
+                                $(document).ready(function() {
+                                $("#button").click(function() {
+                                $("#pos_class_ui").text("Loading...");
+                                });
+                                });
+                                     </script>')
+                                ),
                               mainPanel(
                                 uiOutput("pos_class_ui"))
                             )),
@@ -68,8 +76,15 @@ app_ui <- function() {
                             sidebarLayout(
                               sidebarPanel(
                                 actionButton(("button_n"), "Load Image / Save"),
-                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5), 
-                                           downloadButton(("dl_training_N"), label="Save Classification File")),
+                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                                downloadButton(("dl_training_N"), label="Save Classification File"),
+                                HTML('<script type="text/javascript">
+                                $(document).ready(function() {
+                                $("#button_n").click(function() {
+                                $("#neg_class_ui").text("Loading...");
+                                });
+                                });
+                                     </script>')),
                               mainPanel(
                                 uiOutput("neg_class_ui"))
                             ))
