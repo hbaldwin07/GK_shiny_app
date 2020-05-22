@@ -21,10 +21,13 @@ mod_ph_segment_ui <- function(id){
       column(4, plotOutput(ns("mask"))),
       column(4, plotOutput(ns("omask")))
     ),
+    fluidRow(h4("Final Segmentation")),
     fluidRow(
       column(6, plotOutput(ns("color"))),
-      column(6, plotOutput(ns("outline")), br(), 
-             sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
+      column(6, plotOutput(ns("outline")))
+             #, br(), 
+             #sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
+  )
   )
 }
     
@@ -36,13 +39,10 @@ mod_ph_segment_ui <- function(id){
     
 mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, nseg){
   ns <- session$ns
-  # cell_norm <- reactive({
-  #   cell_norm= ph_norm()
-  #   #*params()$ph_int
-  # })
   cell_norm <- reactive({
-    ph_norm()
+    cell_norm= ph_norm()*params()$ph_int
   })
+
   cmask <- reactive({
     #browser()
     filter <- as.numeric(params()$ph_filter)
@@ -80,7 +80,8 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
     cell_seg <- rmObjects(cseg, ids)
   })
   seg_out <- reactive({
-    seg_out = paintObjects(cell_seg(),toRGB(cell_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    # seg_out = paintObjects(cell_seg(),toRGB(cell_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
   })
   output$cell_norm <- renderPlot({
     plot(cell_norm())
@@ -98,13 +99,13 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
   })
   output$color <- renderPlot({
     plot(colorLabels(cell_seg()))
-    mtext("Final Seg", side=3, line=1, cex=1.25)
-    mtext("Color Label", side=3)
+    #mtext("Final Seg", side=3, line=1, cex=1.25)
+    #mtext("Color Label", side=3)
   })
   output$outline <- renderPlot({
     plot(seg_out())
-    mtext("Final Seg", side=3, line=1, cex=1.25)
-    mtext("Outline", side=3)
+    #mtext("Final Seg", side=3, line=1, cex=1.25)
+    #mtext("Outline", side=3)
   })
   
   return(cell_seg)

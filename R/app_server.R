@@ -21,17 +21,22 @@ app_server <- function(input, output,session) {
   dapi_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_1", img=img1(), n=reactive(r$mod3$DAPI), r)})
   pheno_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_2", img=img1(), n=reactive(r$mod3$GFP), r)})
   callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)
-  nseg1 <- reactive({callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
-  #callModule(mod_dl_params_server, "mod_dl_params_ui_1", r)
   callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(r$mod6), nseg=nseg1(), r)
+  
+  nseg1 <- reactive({callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
+  
   callModule(mod_dl_params_server, "dl_params_ui_1", r)
   
   callModule(mod_cmodel_dir_server, "cmodel_dir_ui_1", r)
   callModule(mod_create_model_server, "create_model_ui_1", r)
   callModule(mod_test_model_server, "test_model_ui_1", r)
- 
   
-  
+  observe({
+    r$button = input$button
+  })
+  observe({
+    r$button = input$button_n
+  })
   
   filenames = reactive({
     path = r$img_dir$path
@@ -49,7 +54,9 @@ app_server <- function(input, output,session) {
   
   observeEvent(input$button, {
     count <<- count + 1
-    if (count <= length(filenames())) {
+    if (count == 0) {
+      return(NULL)
+    } else if (count <= length(filenames())) {
       loop(count)
       table <- loop(count)
     }
@@ -57,13 +64,15 @@ app_server <- function(input, output,session) {
       return(mod_classify_ui(paste0("mod_classify_ui_", count)))
     })
     observeEvent(table(), {
-      #browser()
       values$data <- rbind(values$data, table())
     })
   })
+  
   observeEvent(input$button_n, {
     count <<- count + 1
-    if (count <= length(filenames())) {
+    if (count == 0) {
+      return(NULL)
+    } else if (count <= length(filenames())) {
       loop2(count)
       table2 <- loop2(count)
     }

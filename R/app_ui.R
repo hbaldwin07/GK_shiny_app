@@ -34,7 +34,6 @@ app_ui <- function() {
                                 mod_nuc_params_ui("nuc_params_ui_1")
                               ),
                               mainPanel(
-                                #textOutput("test")
                                 mod_n_segment_ui("n_segment_ui_1")
                               )
                             )),
@@ -57,16 +56,19 @@ app_ui <- function() {
                  tabsetPanel(
                    tabPanel("Positive",
                             sidebarLayout(
-                              sidebarPanel(actionButton(("button"), label="Load Image"),
-                                           sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                                           downloadButton(("dl_training_P"), label="Save Classification File")),
+                              sidebarPanel(
+                                #actionButton(("button"), label="Load Image"),
+                                actionButton(("button"), label="Load Image / Save"),
+                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                                downloadButton(("dl_training_P"), label="Save Classification File")),
                               mainPanel(
                                 uiOutput("pos_class_ui"))
                             )),
                    tabPanel("Negative",
                             sidebarLayout(
-                              sidebarPanel(actionButton(("button_n"), label="Load Image"),
-                                           sliderInput(("int"), "Image Intensity:",1,500,100, step=5), 
+                              sidebarPanel(
+                                actionButton(("button_n"), "Load Image / Save"),
+                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5), 
                                            downloadButton(("dl_training_N"), label="Save Classification File")),
                               mainPanel(
                                 uiOutput("neg_class_ui"))

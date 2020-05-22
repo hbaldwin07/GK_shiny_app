@@ -16,18 +16,11 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h4(textOutput(ns("text"))),
-    actionButton(ns("save"), label="Save Image Data"),
+    h4(textOutput(ns("text2"))),
+    #actionButton(ns("save"), label="Save Image Data"),
     br(),
+    textOutput(ns("text")),
     plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px")
-    # fluidRow(
-    #   actionButton(ns("save"), label="Save Data")),
-    # 
-    # fluidRow(style = "margin: 15px;",
-    #          column(12,
-    #                 h4(textOutput(ns("text"))),
-    #                 plotOutput(ns("image"), click=ns("plot_click"), width="1000px", height="1000px")
-    #                 ))
   )
 }
     
@@ -39,19 +32,19 @@ mod_classify_ui <- function(id){
     
 mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify, ix){
   ns <- session$ns
-  output$text <- renderText({
-    if (classify()=="pos") {
-      text = "Download Positive Examples"
-    } else {
-      text = "Download Negative Examples"
-    }
-  })
-  
-  # output$text2 <- renderText({
+  # output$text <- renderText({
   #   if (classify()=="pos") {
-  #     text2 = "Select Positive Examples"
-  #   } else {text2 = "Select Negative Examples"}
+  #     text = "Download Positive Examples"
+  #   } else {
+  #     text = "Download Negative Examples"
+  #   }
   # })
+  
+  output$text2 <- renderText({
+    if (classify()=="pos") {
+      text2 = "Select Positive Examples"
+    } else {text2 = "Select Negative Examples"}
+  })
 
   seg_out <- reactive({
     #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
@@ -109,6 +102,12 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     Ts.training[row_n$V1, 21] <- classify1
     rds_training <- Ts.training
   })
+  
+  # n_classified = reactive({
+  #   total = nrow(rds_training())
+  #   n_c = which(rds_training()$predict == 0)
+  #   n_classified = total-length(n_c)
+  # })
 
   # output$dl_training <- downloadHandler(
   #   filename <- function() {
@@ -123,6 +122,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   #     saveRDS(table, file=file)
   #   }
   # )
+  
   table_test <- reactive({
     table_test_shape = computeFeatures.shape(cell_seg(),ph_norm())
     table_test_moment = computeFeatures.moment(cell_seg(),ph_norm())
@@ -132,12 +132,39 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     table_test<-data.frame(cbind(rownameTable,table_test))
   })
   modvalues <- reactiveValues(new_rows=NULL)
-  observeEvent(input$save, {
-    modvalues$new_rows <- data.frame(rds_training())
-  })
+  # observeEvent(input$save, {
+  #   modvalues$new_rows <- data.frame(rds_training())
+  # })
   # observe({
   #   modvalues$new_rows <- data.frame(rds_training())
   # })
+  count = 0
+  
+  observeEvent(r$button, {
+    count <<- count + 1
+    if (count > 1) {
+      modvalues$new_rows <- data.frame(rds_training())
+      n_classified = reactive({
+        total = nrow(rds_training())
+        n_c = which(rds_training()$predict == 0)
+        n_classified = total-length(n_c)
+      })
+      output$text = renderText({
+        browser()
+        text = paste0("# cells selected: ", n_classified())
+      })
+    }
+  })
+  
+  # 
+  # observeEvent(r$button, {
+  #   count <<- count + 1
+  #   if (count > 0) {
+  #     return(NULL)
+  #   } else {
+  #     modvalues$new_rows <- data.frame(rds_training())
+  #   }
+  #   })
   
   return(reactive({modvalues$new_rows}))
   

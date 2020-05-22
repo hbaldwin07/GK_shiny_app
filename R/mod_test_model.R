@@ -21,9 +21,7 @@ mod_test_model_ui <- function(id){
         fileInput(ns("test_img"), label="Choose Test Image"),
         fileInput(ns("rds_file"), label=("Load the RDS file")),
         fileInput(ns("csv_file"), label=("Load the parameter (csv) file")),
-        #actionButton(ns("img_button"), label="Show Image"),
         downloadButton(ns("parameters"), "Get Image Settings"), 
-        #fileInput(ns("image_new"), "Load image: test model"),
         sliderInput(ns("dv"), label="SVM Decision Value", -5, 5, 0, step=0.1),
         sliderInput(ns("int"), label="Image intensity:", 1, 100, 5, step=1)
       ),
