@@ -19,8 +19,10 @@ mod_classify_ui <- function(id){
     h4(textOutput(ns("text2"))),
     #actionButton(ns("save"), label="Save Image Data"),
     br(),
-    textOutput(ns("text")),
-    plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px")
+    fluidRow(
+      textOutput(ns("text")),
+      plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px")
+    )
   )
 }
     
@@ -32,13 +34,6 @@ mod_classify_ui <- function(id){
     
 mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify, ix){
   ns <- session$ns
-  # output$text <- renderText({
-  #   if (classify()=="pos") {
-  #     text = "Download Positive Examples"
-  #   } else {
-  #     text = "Download Negative Examples"
-  #   }
-  # })
   
   output$text2 <- renderText({
     if (classify()=="pos") {
@@ -103,26 +98,6 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     rds_training <- Ts.training
   })
   
-  # n_classified = reactive({
-  #   total = nrow(rds_training())
-  #   n_c = which(rds_training()$predict == 0)
-  #   n_classified = total-length(n_c)
-  # })
-
-  # output$dl_training <- downloadHandler(
-  #   filename <- function() {
-  #     i = ix()
-  #     if (classify()=="pos") {
-  #       paste("positive_training.rds", i, sep="_")
-  #     } else {paste("negative_training.rds", i, sep="_")}
-  #   },
-  #   content <- function(file) {
-  #     #browser()
-  #     table <- rds_training()
-  #     saveRDS(table, file=file)
-  #   }
-  # )
-  
   table_test <- reactive({
     table_test_shape = computeFeatures.shape(cell_seg(),ph_norm())
     table_test_moment = computeFeatures.moment(cell_seg(),ph_norm())
@@ -132,12 +107,6 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     table_test<-data.frame(cbind(rownameTable,table_test))
   })
   modvalues <- reactiveValues(new_rows=NULL)
-  # observeEvent(input$save, {
-  #   modvalues$new_rows <- data.frame(rds_training())
-  # })
-  # observe({
-  #   modvalues$new_rows <- data.frame(rds_training())
-  # })
   count = 0
   
   observeEvent(r$button, {
@@ -155,17 +124,6 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
       })
     }
   })
-  
-  # 
-  # observeEvent(r$button, {
-  #   count <<- count + 1
-  #   if (count > 0) {
-  #     return(NULL)
-  #   } else {
-  #     modvalues$new_rows <- data.frame(rds_training())
-  #   }
-  #   })
-  
   return(reactive({modvalues$new_rows}))
   
   # output$table = renderTable({
