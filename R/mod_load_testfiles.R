@@ -1,6 +1,8 @@
 # Module UI
   
 #' @title   mod_load_testfiles_ui and mod_load_testfiles_server
+#######UNUSED SCRIPT#########
+
 #' @description  A shiny Module.
 #'
 #' @param id shiny id
