@@ -41,35 +41,35 @@ mod_test_model_ui <- function(id){
 mod_test_model_server <- function(input, output, session, r){
   ns <- session$ns
   
-  # ##DEV MODE ONLY##
-  mymodel <- reactive({
-    mymodel <- readRDS("~/Downloads/mymodel.rds")
-  })
-  img <- reactive({
-    readImage("~/Documents/test_tifs/HAB135_WT_Tom20-CAT-dapi_1.tif")
-  })
-  param <- reactive({
-    param <- read.csv("~/Downloads/table.csv", stringsAsFactors = F)
-  })
-  
+  # # ##DEV MODE ONLY##
   # mymodel <- reactive({
-  #   m <- input$rds_file
-  #   if (is.null(m))
-  #     return(NULL)
-  #   mymodel <- readRDS(m$datapath)
+  #   mymodel <- readRDS("~/Downloads/mymodel.rds")
   # })
   # img <- reactive({
-  #   f <- input$test_img
-  #   if (is.null(f))
-  #     return(NULL)
-  #   readImage(f$datapath, all=T)
+  #   readImage("~/Documents/test_tifs/HAB135_WT_Tom20-CAT-dapi_1.tif")
   # })
   # param <- reactive({
-  #   df.parameter <- input$csv_file
-  #   if (is.null(df.parameter))
-  #     return(NULL)
-  #   param <- read.csv(df.parameter$datapath, stringsAsFactors = F)
+  #   param <- read.csv("~/Downloads/table.csv", stringsAsFactors = F)
   # })
+  
+  mymodel <- reactive({
+    m <- input$rds_file
+    if (is.null(m))
+      return(NULL)
+    mymodel <- readRDS(m$datapath)
+  })
+  img <- reactive({
+    f <- input$test_img
+    if (is.null(f))
+      return(NULL)
+    readImage(f$datapath, all=T)
+  })
+  param <- reactive({
+    df.parameter <- input$csv_file
+    if (is.null(df.parameter))
+      return(NULL)
+    param <- read.csv(df.parameter$datapath, stringsAsFactors = F)
+  })
   
   r$test = reactiveValues()
   observe({

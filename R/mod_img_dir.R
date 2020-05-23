@@ -29,24 +29,24 @@ mod_img_dir_ui <- function(id){
 mod_img_dir_server <- function(input, output, session, r){
   ns <- session$ns
 
-  ##DEV MODE ONLY##
-  r$img_dir = reactiveValues()
-  observe({
-    r$img_dir$path = "~/Documents/test_tifs/"
-  })
-  ##
+  # ##DEV MODE ONLY##
+  # r$img_dir = reactiveValues()
+  # observe({
+  #   r$img_dir$path = "~/Documents/test_tifs/"
+  # })
+  # ##
   
-  # observeEvent(
-  #   ignoreNULL = TRUE,
-  #   eventExpr = {input$directory},
-  #   handlerExpr = {
-  #     if (input$directory>0) {
-  #       path = shinyDirectoryInput::choose.dir(default=shinyDirectoryInput::readDirectoryInput(session, "directory"))
-  #       shinyDirectoryInput::updateDirectoryInput(session, 'directory', value = path)
-  #       r$img_dir$path = path
-  #     }
-  #   }
-  #   )
+  observeEvent(
+    ignoreNULL = TRUE,
+    eventExpr = {input$directory},
+    handlerExpr = {
+      if (input$directory>0) {
+        path = shinyDirectoryInput::choose.dir(default=shinyDirectoryInput::readDirectoryInput(session, "directory"))
+        shinyDirectoryInput::updateDirectoryInput(session, 'directory', value = path)
+        r$img_dir$path = path
+      }
+    }
+    )
 }
 
 
