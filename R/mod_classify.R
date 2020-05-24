@@ -120,7 +120,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   #   }
   # })
 
-  observeEvent(r$button, {
+  observeEvent(r$mod$button, {
     count <<- count + 1
     if (count > 1) {
       modvalues$new_rows <- data.frame(rds_training())

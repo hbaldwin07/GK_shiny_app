@@ -19,23 +19,23 @@ mod_classify_loop_ui <- function(id){
   ns <- NS(id)
   tagList(
     sidebarLayout(
-      sidebarPanel("Positive",
-                   fluidRow(column(6,
-                                   actionButton(ns("button"), label="Load Image"))
-                            # ,column(6, 
-                            #        actionButton(("button_save"), label="Save"))
-                            # , 
-                            # column(4,actionButton(("button_next"), label="Next Image"))
-                   ),
-                   fluidRow(
-                     sliderInput(ns("int"), "Image Intensity:",1,500,100, step=5))),
+      sidebarPanel(
+        actionButton(ns("button"), label="Load Image / Save"),
+        sliderInput(ns("int"), "Image Intensity:",1,500,100, step=5),
+        downloadButton(ns("dl_training"), label="Save Classification File")
+      ),
       mainPanel(
-        uiOutput(ns("pos_class_ui"))
-        # ,tableOutput("table")
-      )
-    )
-    
-    
+        uiOutput(ns("class_ui")))
+      
+      # fluidRow(column(6,
+      #                 actionButton(ns("button"), label="Load Image"))
+      #          # ,column(6, 
+      #          #        actionButton(("button_save"), label="Save"))
+      #          # , 
+      #          # column(4,actionButton(("button_next"), label="Next Image"))
+      # ),
+      # fluidRow(
+      #   sliderInput(ns("int"), "Image Intensity:",1,500,100, step=5))),
     
     # #fluidRow(downloadButton(ns("dl_training"), label=textOutput(ns("text")))),
     # fluidRow(actionButton(ns("button"), label="Load Image"))
@@ -47,6 +47,7 @@ mod_classify_loop_ui <- function(id){
     #          #uiOutput(ns("ui"))),
     # #fluidRow(sliderInput(ns("int"), "Image Intensity:",1,500,100, step=5)))
   )
+  )
 }
     
 # Module Server
@@ -55,17 +56,19 @@ mod_classify_loop_ui <- function(id){
 #' @export
 #' @keywords internal
     
-mod_classify_loop_server <- function(input, output, session, r 
-                                     # ,classify
-                                     ){
+mod_classify_loop_server <- function(input, output, session, r, classify){
   ns <- session$ns
+  r$mod = reactiveValues()
+  
+  observe({
+    r$mod$button = input$button
+  })
   
   filenames = reactive({
     path = r$img_dir$path
     tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
     filenames= as.list(tifs)
   })
-  
   observe({
     r$classify_input_int = input$int
   })
@@ -77,33 +80,103 @@ mod_classify_loop_server <- function(input, output, session, r
   
   observeEvent(input$button, {
     count <<- count + 1
-    loop(count)
-    #table <- loop(count)
-    #browser()
-    output$pos_class_ui <- renderUI({
-      return(mod_classify_ui("mod_classify_ui_1"))
-      #return(mod_classify_ui(paste0("mod_classify_ui_", count)))
+    classify = classify()
+    if (count == 0) {
+      return(NULL)
+    } else if (count <= length(filenames())) {
+      loop(count, classify)
+      table <- loop(count, classify)
+    }
+    output$class_ui <- renderUI({
+      return(mod_classify_ui(paste0("mod_classify_ui_", count)))
     })
-    # observeEvent(table(), {
-    #   #browser()
-    #   values$data <- rbind(values$data, table())
-    # })
+    observeEvent(table(), {
+      values$data <- rbind(values$data, table())
+    })
   })
-
-  loop <- function(i) {
+  
+  loop <- function(i, cl) {
     img = reactive({callModule(mod_load_img_server, "temp", ix=reactive(i), r=r)})
     dapi = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$DAPI), r=r)})
     pheno = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$GFP), r=r)})
     nseg = reactive({callModule(mod_n_segment_server, "temp", nuc_norm=dapi(), params=reactive(r$mod4), r=r)})
     cseg = reactive({callModule(mod_ph_segment_server, "temp", ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
-    browser()
-    callModule(mod_classify_server, "mod_classify_ui_1", r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))
-    #callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"), ix=reactive(i))
-    #callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=classify())
-    #isolate({values[[paste0("df", count)]] = callModule(mod_classify_server, "mod_classify_ui_1", r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))})
+    # callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"), ix=reactive(i))
+    callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive(cl), ix=reactive(i))
   }
   
+  output$dl_training <- downloadHandler(
+    filename <- function() {
+      classify = classify()
+      if (classify == "pos") {
+        txt = "positive_training.rds"
+      } else {
+        txt = "negative_training.rds"
+      }
+      paste0(txt)
+    },
+    content <- function(file) {
+      table <- values$data
+      saveRDS(table, file=file)
+    }
+  )
 }
+
+  # output$dl_training_N <- downloadHandler(
+  #   filename <- function() {
+  #     paste("negative_training.rds")
+  #   },
+  #   content <- function(file) {
+  #     table2 <- values$data
+  #     saveRDS(table2, file=file)
+  #   }
+  #)
+  # 
+  # 
+  # filenames = reactive({
+  #   path = r$img_dir$path
+  #   tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
+  #   filenames= as.list(tifs)
+  # })
+  # 
+  # observe({
+  #   r$classify_input_int = input$int
+  # })
+  # 
+  # data = data.frame()
+  # values= reactiveValues(data=data)
+  # #rv = reactiveValues()
+  # count = 0
+  # 
+  # observeEvent(input$button, {
+  #   count <<- count + 1
+  #   loop(count)
+  #   #table <- loop(count)
+  #   #browser()
+  #   output$pos_class_ui <- renderUI({
+  #     return(mod_classify_ui("mod_classify_ui_1"))
+  #     #return(mod_classify_ui(paste0("mod_classify_ui_", count)))
+  #   })
+  #   # observeEvent(table(), {
+  #   #   #browser()
+  #   #   values$data <- rbind(values$data, table())
+  #   # })
+  # })
+  # 
+  # loop <- function(i) {
+  #   img = reactive({callModule(mod_load_img_server, "temp", ix=reactive(i), r=r)})
+  #   dapi = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$DAPI), r=r)})
+  #   pheno = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$GFP), r=r)})
+  #   nseg = reactive({callModule(mod_n_segment_server, "temp", nuc_norm=dapi(), params=reactive(r$mod4), r=r)})
+  #   cseg = reactive({callModule(mod_ph_segment_server, "temp", ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
+  #   browser()
+  #   callModule(mod_classify_server, "mod_classify_ui_1", r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))
+  #   #callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"), ix=reactive(i))
+  #   #callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=classify())
+  #   #isolate({values[[paste0("df", count)]] = callModule(mod_classify_server, "mod_classify_ui_1", r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))})
+  # }
+  # 
+# }
 
 # observeEvent(input$save, {
 #   if (count ==0) {
