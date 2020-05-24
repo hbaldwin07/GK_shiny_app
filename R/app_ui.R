@@ -72,9 +72,24 @@ app_ui <- function() {
                               mainPanel(
                                 uiOutput("pos_class_ui"))
                               )
-                            )
-                   )),
-                           
+                            ), 
+                     tabPanel("Negative",
+                              sidebarLayout(
+                                sidebarPanel(
+                                  actionButton(("button_n"), "Load Image / Save"),
+                                  sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                                  downloadButton(("dl_training_N"), label="Save Classification File"),
+                                  HTML('<script type="text/javascript">
+                                  $(document).ready(function() {
+                                  $("#button_n").click(function() {
+                                  $("#neg_class_ui").text("Loading...");
+                                  });
+                                  });
+                                       </script>')),
+                                mainPanel(
+                                  uiOutput("neg_class_ui"))
+                              ))
+                   )),          
         tabPanel("Create Model", 
                  fluidRow(
                    mod_cmodel_dir_ui("cmodel_dir_ui_1")
