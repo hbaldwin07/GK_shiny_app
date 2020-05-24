@@ -28,7 +28,8 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-Remotes: 
+Remotes:  
+    wleepang/shiny-directory-input,
     wleepang/shiny-directory-input,
     wleepang/shiny-directory-input,
     wleepang/shiny-directory-input

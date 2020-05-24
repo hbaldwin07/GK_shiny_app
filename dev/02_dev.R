@@ -23,9 +23,10 @@
 #golem::add_module(name="classify")
 #golem::add_module(name="img_dir")
 #golem::add_module(name="create_model")
-golem::add_module(name="cmodel_dir")
+#golem::add_module(name="cmodel_dir")
 
 ## 2.2 Add dependencies
+#uisethis::use_package("BiocInstaller")
 usethis::use_package( "BiocManager" )
 usethis::use_package("yaImpute")
 usethis::use_package( "EBImage" ) 
@@ -50,9 +51,9 @@ golem::browser_button()
 
 ## 2.5 Add external files
 
-golem::add_js_file( "script" )
-golem::add_js_handler( "handlers" )
-golem::add_css_file( "custom" )
+# golem::add_js_file( "script" )
+# golem::add_js_handler( "handlers" )
+# golem::add_css_file( "custom" )
 
 # 3. Documentation
 

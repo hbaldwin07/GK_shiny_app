@@ -16,7 +16,7 @@
 mod_img_dir_ui <- function(id){
   ns <- NS(id)
   tagList(
-    shinyDirectoryInput::directoryInput(ns('directory'), label = 'select a directory', value="~")
+    shinyDirectoryInput::directoryInput(ns('directory'), label = 'select a directory')
   )
 }
     
