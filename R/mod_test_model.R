@@ -26,6 +26,7 @@ mod_test_model_ui <- function(id){
         sliderInput(ns("int"), label="Image intensity:", 1, 100, 5, step=1)
       ),
       mainPanel(
+        h4("Positive Cells: blue outlines"),
         plotOutput(ns("model_img"))
       )
     )
