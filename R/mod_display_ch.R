@@ -31,6 +31,7 @@ mod_display_ch_ui <- function(id){
 mod_display_ch_server <- function(input, output, session, img, n, r){
   ns <- session$ns
   ch_f <- reactive({
+    req(img())
     #browser()
     size <- as.numeric(dim(img()))
     chA <- img()[1:size[1], 1:size[2],n()] 
