@@ -51,11 +51,69 @@ app_ui <- function() {
                             mod_dl_params_ui("dl_params_ui_1")
                    )
                  )
-        ), 
+        ),
         tabPanel("Image Classification",
                  tabsetPanel(
                    tabPanel("Positive",
-                            mod_classify_loop_ui("pos_classify_ui_1")
+                            sidebarLayout(
+                              sidebarPanel(
+                                actionButton(("button"), label="Load Image / Save"),
+                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                                downloadButton(("dl_training_P"),
+                                               label="Save Classification File"),
+                                HTML('<script type="text/javascript">
+                                $(document).ready(function() {
+                                $("#button").click(function() {
+                                $("#pos_class_ui").text("Loading...");
+                                });
+                                });
+                                     </script>')
+                                ),
+                              mainPanel(
+                                uiOutput("pos_class_ui"))
+                              )
+                            )
+                   )),
+                           
+        tabPanel("Create Model", 
+                 fluidRow(
+                   mod_cmodel_dir_ui("cmodel_dir_ui_1")
+                 ),
+                 fluidRow(
+                   mod_create_model_ui("create_model_ui_1")
+                 )
+        ),
+        tabPanel("Test Model",
+                 mod_test_model_ui("test_model_ui_1")
+        )
+      )
+    )
+  )
+}
+        
+        # tabPanel("Image Classification",
+        #          tabsetPanel(
+        #            tabPanel("Positive",
+        #                     sidebarLayout(
+        #                       sidebarPanel(
+        #                         actionButton(("button"), label="Load Image / Save"),
+        #                         sliderInput(("int"), "Image Intensity:",1,500,100, step=5)),
+        #                         # ,
+        #                         # downloadButton(("dl_training_P"),
+        #                         #                label="Save Classification File"),
+        #                         # HTML('<script type="text/javascript">
+        #                         # $(document).ready(function() {
+        #                         # $("#button").click(function() {
+        #                         # $("#pos_class_ui").text("Loading...");
+        #                         # });
+        #                         # });
+        #                         #      </script>')
+        #                         # ),
+        #                       mainPanel(
+        #                         mod_classify_loop_ui("pos_classify_ui_1"))))),
+                   
+                            
+                           # mod_classify_loop_ui("pos_classify_ui_1")
                             # sidebarLayout(
                             #   sidebarPanel(
                             #     actionButton(("button"), label="Load Image / Save"),
@@ -72,40 +130,25 @@ app_ui <- function() {
                             #     ),
                             #   mainPanel(
                             #     uiOutput("pos_class_ui"))
-                            )),
-                   tabPanel("Negative",
-                            mod_classify_loop_ui("neg_classify_ui_1")
-                            # sidebarLayout(
-                            #   sidebarPanel(
-                            #     actionButton(("button_n"), "Load Image / Save"),
-                            #     sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                            #     downloadButton(("dl_training_N"), label="Save Classification File"),
-                            #     HTML('<script type="text/javascript">
-                            #     $(document).ready(function() {
-                            #     $("#button_n").click(function() {
-                            #     $("#neg_class_ui").text("Loading...");
-                            #     });
-                            #     });
-                            #          </script>')),
-                            #   mainPanel(
-                            #     uiOutput("neg_class_ui"))
-                            # ))
-                 )),
-        tabPanel("Create Model", 
-                 fluidRow(
-                   mod_cmodel_dir_ui("cmodel_dir_ui_1")
-                 ),
-                 fluidRow(
-                   mod_create_model_ui("create_model_ui_1")
-                 )
-        ),
-        tabPanel("Test Model",
-                 mod_test_model_ui("test_model_ui_1")
-                 )
-      )
-    )
-  )
-}
+                 #            )),
+                 #   tabPanel("Negative",
+                 #            mod_classify_loop_ui("neg_classify_ui_1")
+                 #            # sidebarLayout(
+                 #            #   sidebarPanel(
+                 #            #     actionButton(("button_n"), "Load Image / Save"),
+                 #            #     sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                 #            #     downloadButton(("dl_training_N"), label="Save Classification File"),
+                 #            #     HTML('<script type="text/javascript">
+                 #            #     $(document).ready(function() {
+                 #            #     $("#button_n").click(function() {
+                 #            #     $("#neg_class_ui").text("Loading...");
+                 #            #     });
+                 #            #     });
+                 #            #          </script>')),
+                 #            #   mainPanel(
+                 #            #     uiOutput("neg_class_ui"))
+                 #            # ))
+                 # )),
 
 
 #' @import shiny

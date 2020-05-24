@@ -18,6 +18,8 @@
 mod_classify_loop_ui <- function(id){
   ns <- NS(id)
   tagList(
+    # downloadButton(downloadButton(ns("dl_training"), label="Save Classification File")),
+    # uiOutput(ns("class_ui"))
     sidebarLayout(
       sidebarPanel(
         actionButton(ns("button"), label="Load Image / Save"),
@@ -26,6 +28,12 @@ mod_classify_loop_ui <- function(id){
       ),
       mainPanel(
         uiOutput(ns("class_ui")))
+    )
+    )
+}
+    
+    
+   
       
       # fluidRow(column(6,
       #                 actionButton(ns("button"), label="Load Image"))
@@ -46,9 +54,6 @@ mod_classify_loop_ui <- function(id){
     #          #plotOutput(ns("image"))),
     #          #uiOutput(ns("ui"))),
     # #fluidRow(sliderInput(ns("int"), "Image Intensity:",1,500,100, step=5)))
-  )
-  )
-}
     
 # Module Server
     
@@ -59,50 +64,65 @@ mod_classify_loop_ui <- function(id){
 mod_classify_loop_server <- function(input, output, session, r, classify){
   ns <- session$ns
   r$mod = reactiveValues()
-  
   observe({
     r$mod$button = input$button
+    r$mod$int = input$int
   })
+  #r$mod = reactiveValues()
+  
+  # observe({
+  #   r$mod$button = r$button
+  # })
   
   filenames = reactive({
     path = r$img_dir$path
     tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
     filenames= as.list(tifs)
   })
-  observe({
-    r$classify_input_int = input$int
-  })
+  # observe({
+  #   r$mod$classify_input_int = input$int
+  # })
   
   data = data.frame()
   values= reactiveValues(data=data)
-  #rv = reactiveValues()
   count = 0
   
+  
+  output$class_ui <- renderUI({
+    return(mod_classify_ui(paste0("mod_classify_ui_", count)))
+  })
+  
   observeEvent(input$button, {
+    #r$mod$button,{
     count <<- count + 1
     classify = classify()
     if (count == 0) {
       return(NULL)
     } else if (count <= length(filenames())) {
+      #browser()
       loop(count, classify)
       table <- loop(count, classify)
     }
-    output$class_ui <- renderUI({
-      return(mod_classify_ui(paste0("mod_classify_ui_", count)))
-    })
+    # output$class_ui <- renderUI({
+    #   return(mod_classify_ui(paste0("mod_classify_ui_", count)))
+    # })
+    #browser()
+    # output$class_ui <- renderUI({
+    #   return(mod_classify_ui(paste0("mod_classify_ui_", count)))
+    # })
     observeEvent(table(), {
       values$data <- rbind(values$data, table())
     })
   })
   
   loop <- function(i, cl) {
-    img = reactive({callModule(mod_load_img_server, "temp", ix=reactive(i), r=r)})
-    dapi = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$DAPI), r=r)})
-    pheno = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$GFP), r=r)})
-    nseg = reactive({callModule(mod_n_segment_server, "temp", nuc_norm=dapi(), params=reactive(r$mod4), r=r)})
-    cseg = reactive({callModule(mod_ph_segment_server, "temp", ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
-    # callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"), ix=reactive(i))
-    callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive(cl), ix=reactive(i))
+    img = callModule(mod_load_img_server, "mod_img_temp", ix=reactive(i), r=r)
+    dapi = callModule(mod_norm_ch_server, "mod_dapi_temp", img=reactive(img()), n=reactive(r$mod3$DAPI), r=r)
+    pheno = callModule(mod_norm_ch_server, "mod_pheno_temp", img=reactive(img()), n=reactive(r$mod3$GFP), r=r)
+    nseg = callModule(mod_n_segment_server, "mod_nseg_temp", nuc_norm=reactive(dapi()), params=reactive(r$mod4), r=r)
+    cseg = callModule(mod_ph_segment_server, "mod_cseg_temp", ph_norm=reactive(pheno()), params=reactive(r$mod6), nseg=reactive(nseg()), r=r)
+    #browser()
+    callModule(mod_classify_server, paste0("mod_classify_ui_", i), r=r, img=reactive(img()), cell_seg=reactive(cseg()), ph_norm=reactive(pheno()), classify=reactive(cl), ix=reactive(i))
   }
   
   output$dl_training <- downloadHandler(

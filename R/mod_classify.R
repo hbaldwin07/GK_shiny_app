@@ -16,10 +16,9 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h4(textOutput(ns("text2"))),
-    br(),
-    fluidRow(plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
-  )
+    # h4(textOutput(ns("text2"))),
+    # br(),
+    plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
 }
     
 # Module Server
@@ -30,6 +29,7 @@ mod_classify_ui <- function(id){
     
 mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify, ix){
   ns <- session$ns
+  #browser()
   
   output$text2 <- renderText({
     if (classify()=="pos") {
@@ -39,7 +39,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
 
   seg_out <- reactive({
     #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
-    seg_out = paintObjects(cell_seg(),toRGB(ph_norm()* r$classify_input_int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    seg_out = paintObjects(cell_seg(),toRGB(ph_norm()* r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
   })
   
   initX <-1
@@ -120,12 +120,12 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   #   }
   # })
 
-  observeEvent(r$mod$button, {
-    count <<- count + 1
-    if (count > 1) {
-      modvalues$new_rows <- data.frame(rds_training())
-    }
-  })
+  observeEvent(r$button, {
+      count <<- count + 1
+      if (count > 1) {
+        modvalues$new_rows <- data.frame(rds_training())
+      }
+    })
   
   return(reactive({modvalues$new_rows}))
   
