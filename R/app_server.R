@@ -9,25 +9,41 @@ app_server <- function(input, output,session) {
   r <- reactiveValues()
   
   callModule(mod_img_dir_server, "img_dir_ui_1", r)
+  img1 <- reactive({callModule(mod_load_img_server, "load_img_ui_1", r, ix=reactive(1))})
+  callModule(mod_display_ch_server, "display_ch_ui_1", img=img1(), n=reactive(1), r)
+  callModule(mod_display_ch_server, "display_ch_ui_2", img=img1(), n=reactive(2), r)
+  callModule(mod_display_ch_server, "display_ch_ui_3", img=img1(), n=reactive(3), r)
+  callModule(mod_display_ch_server, "display_ch_ui_4", img=img1(), n=reactive(4), r)
+  callModule(mod_select_ch_server, "select_ch_ui_1", r)
+  callModule(mod_nuc_params_server, "nuc_params_ui_1", r)
+  callModule(mod_ph_params_server, "ph_params_ui_1", r)
+  dapi_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_1", img=img1(), n=reactive(r$mod3$DAPI), r)})
+  pheno_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_2", img=img1(), n=reactive(r$mod3$GFP), r)})
+  callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)
+  callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(r$mod6), nseg=nseg1(), r)
   
-  observeEvent(r$img_dir$path, {
-    img1 <- reactive({callModule(mod_load_img_server, "load_img_ui_1", r, ix=reactive(1))})
-    callModule(mod_display_ch_server, "display_ch_ui_1", img=img1(), n=reactive(1), r)
-    callModule(mod_display_ch_server, "display_ch_ui_2", img=img1(), n=reactive(2), r)
-    callModule(mod_display_ch_server, "display_ch_ui_3", img=img1(), n=reactive(3), r)
-    callModule(mod_display_ch_server, "display_ch_ui_4", img=img1(), n=reactive(4), r)
-    callModule(mod_select_ch_server, "select_ch_ui_1", r)
-    callModule(mod_nuc_params_server, "nuc_params_ui_1", r)
-    callModule(mod_ph_params_server, "ph_params_ui_1", r)
-    dapi_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_1", img=img1(), n=reactive(r$mod3$DAPI), r)})
-    pheno_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_2", img=img1(), n=reactive(r$mod3$GFP), r)})
-    callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)
-    callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(r$mod6), nseg=nseg1(), r)
-    
-    nseg1 <- reactive({callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
-    
-    callModule(mod_dl_params_server, "dl_params_ui_1", r)
-  })
+  nseg1 <- reactive({callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
+  
+  callModule(mod_dl_params_server, "dl_params_ui_1", r)
+  
+  # observeEvent(r$img_dir$path, {
+  #   img1 <- reactive({callModule(mod_load_img_server, "load_img_ui_1", r, ix=reactive(1))})
+  #   callModule(mod_display_ch_server, "display_ch_ui_1", img=img1(), n=reactive(1), r)
+  #   callModule(mod_display_ch_server, "display_ch_ui_2", img=img1(), n=reactive(2), r)
+  #   callModule(mod_display_ch_server, "display_ch_ui_3", img=img1(), n=reactive(3), r)
+  #   callModule(mod_display_ch_server, "display_ch_ui_4", img=img1(), n=reactive(4), r)
+  #   callModule(mod_select_ch_server, "select_ch_ui_1", r)
+  #   callModule(mod_nuc_params_server, "nuc_params_ui_1", r)
+  #   callModule(mod_ph_params_server, "ph_params_ui_1", r)
+  #   dapi_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_1", img=img1(), n=reactive(r$mod3$DAPI), r)})
+  #   pheno_norm = reactive({callModule(mod_norm_ch_server, "norm_ch_ui_2", img=img1(), n=reactive(r$mod3$GFP), r)})
+  #   callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)
+  #   callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm(), params=reactive(r$mod6), nseg=nseg1(), r)
+  #   
+  #   nseg1 <- reactive({callModule(mod_n_segment_server, "n_segment_ui_1", nuc_norm=dapi_norm(), params=reactive(r$mod4), r)})
+  #   
+  #   callModule(mod_dl_params_server, "dl_params_ui_1", r)
+  # })
 
   # img1 <- reactive({callModule(mod_load_img_server, "load_img_ui_1", r, ix=reactive(1))})
   # callModule(mod_display_ch_server, "display_ch_ui_1", img=img1(), n=reactive(1), r)

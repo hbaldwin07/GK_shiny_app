@@ -38,7 +38,7 @@ usethis::use_package( "shinyjs" )
 #usethis::use_package( "gplots" )
 #usethis::use_package( "ROCR" )
 usethis::use_package( "e1071" )
-#usethis::use_package("shinyFiles")
+usethis::use_package("shinyFiles")
 
 
 ## 2.3 Add tests

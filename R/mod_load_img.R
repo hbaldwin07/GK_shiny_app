@@ -28,23 +28,48 @@ mod_load_img_ui <- function(id){
 mod_load_img_server <- function(input, output, session, r, ix){
   ns <- session$ns
   #browser()
+  
   path = reactive({
     path = r$img_dir$path
   })
 
   f = reactive({
     req(path())
-    tifs = dir(paste0(path())[grep(".tif", dir(paste0(path())))])
+    #path = r$img_dir$path
+    #tifs = dir(paste0(path())[grep(".tif", dir(paste0("/",path())))])
+    #tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
+    tifs = dir(path())[grep(".tif", dir(path()))]
     f = tifs
+    #browser()
   })
   img = reactive({
     req(f(), path())
     f = f()
     i=as.numeric(ix())
-    #browser()
-    readImage(paste0(path(), f[i]))
+    readImage(paste0(path(), "/", f[i]))
   })
   return(img)
+  
+  # observeEvent(ignoreNULL = TRUE, eventExpr = {r$img_dir$path}, 
+  #              handlerExpr = {
+  #                path = reactive({
+  #                  path = r$img_dir$path
+  #                })
+  #                
+  #                f = reactive({
+  #                  req(path())
+  #                  tifs = dir(paste0(path())[grep(".tif", dir(paste0(path())))])
+  #                  f = tifs
+  #                })
+  #                img = reactive({
+  #                  req(f(), path())
+  #                  f = f()
+  #                  i=as.numeric(ix())
+  #                  #browser()
+  #                  readImage(paste0(path(), f[i]))
+  #                })
+  #                return(img) 
+  #              })
 }
     
 ## To be copied in the UI

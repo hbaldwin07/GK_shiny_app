@@ -16,7 +16,11 @@
 mod_img_dir_ui <- function(id){
   ns <- NS(id)
   tagList(
-    shinyDirectoryInput::directoryInput(ns('directory'), label = 'select a directory')
+    #shinyDirectoryInput::directoryInput(ns('directory'), label = 'select a directory')
+    
+    shinyFiles::shinyDirButton(ns("dir"), "Input directory", "Upload"),
+    verbatimTextOutput(ns("dir"), placeholder = TRUE)  
+    
   )
 }
     
@@ -30,24 +34,63 @@ mod_img_dir_server <- function(input, output, session, r){
   ns <- session$ns
   r$img_dir = reactiveValues()
   
+  shinyFiles::shinyDirChoose(
+    input,
+    'dir',
+    roots = c(home = '~'),
+    filetypes = c('', 'tif')
+  )
+  
+  global <- reactiveValues(datapath = getwd())
+  dir <- reactive(input$dir)
+  
+  output$dir <- renderText({
+    global$datapath
+  })
+  
+  # observeEvent(input$dir, {
+  #   r$img_dir$path = input$dir
+  #   #browser()
+  # })
+  
+  # observe({
+  #   r$img_dir$path = input$dir
+  #   #browser()
+  # })
+  
+  observeEvent(ignoreNULL = TRUE, eventExpr = {
+                 input$dir},
+               handlerExpr = {
+                 if (!"path" %in% names(dir())) {
+                   return()
+                 }
+                 home <- normalizePath("~")
+                 global$datapath <-
+                   file.path(home, paste(unlist(dir()$path[-1]), collapse = .Platform$file.sep))
+               })
+  observe({
+    r$img_dir$path = global$datapath
+    #browser()
+  })
+}
+  
   # ##DEV MODE ONLY##
   # observe({
   #   r$img_dir$path = "~/Documents/test_tifs/"
   # })
   # ##
   
-  observeEvent(
-    ignoreNULL = TRUE,
-    eventExpr = {input$directory},
-    handlerExpr = {
-      if (input$directory>0) {
-        path = shinyDirectoryInput::choose.dir(default=shinyDirectoryInput::readDirectoryInput(session, "directory"))
-        shinyDirectoryInput::updateDirectoryInput(session, 'directory', value = path)
-        r$img_dir$path = path
-      }
-    }
-    )
-}
+  # observeEvent(
+  #   ignoreNULL = TRUE,
+  #   eventExpr = {input$directory},
+  #   handlerExpr = {
+  #     if (input$directory>0) {
+  #       path = shinyDirectoryInput::choose.dir(default=shinyDirectoryInput::readDirectoryInput(session, "directory"))
+  #       shinyDirectoryInput::updateDirectoryInput(session, 'directory', value = path)
+  #       r$img_dir$path = path
+  #     }
+  #   }
+  #   )
 
 
   # observeEvent(
