@@ -48,16 +48,6 @@ mod_img_dir_server <- function(input, output, session, r){
     global$datapath
   })
   
-  # observeEvent(input$dir, {
-  #   r$img_dir$path = input$dir
-  #   #browser()
-  # })
-  
-  # observe({
-  #   r$img_dir$path = input$dir
-  #   #browser()
-  # })
-  
   observeEvent(ignoreNULL = TRUE, eventExpr = {
                  input$dir},
                handlerExpr = {
