@@ -1,6 +1,5 @@
 #' @import shiny
 #' @import EBImage
-#' @import shinyFiles
 app_server <- function(input, output,session) {
   # List the first level callModules here
   options(shiny.maxRequestSize=30*1024^2)

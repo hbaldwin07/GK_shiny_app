@@ -63,7 +63,7 @@ mod_create_model_server <- function(input, output, session, r){
     f2 = rds_files[2,]
     #browser()
     Ts.training_sum <- reactive({
-      browser()
+      #browser()
       #path = path()
       #rds <- dir(paste0(path)[grep(".rds", dir(paste0(path)))])
       #Ts.training <- readRDS(paste0(path, "/", rds[1]))

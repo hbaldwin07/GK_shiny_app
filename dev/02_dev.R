@@ -27,7 +27,7 @@
 #golem::add_module(name="seg-img_load")
 
 ## 2.2 Add dependencies
-#uisethis::use_package("BiocInstaller")
+#usethis::use_package("BiocInstaller")
 usethis::use_package( "BiocManager" )
 usethis::use_package("yaImpute")
 usethis::use_package( "EBImage" ) 

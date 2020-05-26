@@ -1,6 +1,5 @@
 #' @import shiny
 #' @import EBImage
-#' @import shinyFiles
 app_ui <- function() {
   tagList(
     # Leave this function for adding external resources
