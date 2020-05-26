@@ -94,9 +94,9 @@ app_ui <- function() {
                               ))
                    )),          
         tabPanel("Create Model", 
-                 fluidRow(
-                   mod_cmodel_dir_ui("cmodel_dir_ui_1")
-                 ),
+                 # fluidRow(
+                 #   mod_cmodel_dir_ui("cmodel_dir_ui_1")
+                 # ),
                  fluidRow(
                    mod_create_model_ui("create_model_ui_1")
                  )

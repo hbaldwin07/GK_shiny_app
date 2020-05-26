@@ -74,7 +74,7 @@ app_server <- function(input, output,session) {
   # callModule(mod_classify_loop_server, "pos_classify_ui_1", r, reactive("pos"))
   # callModule(mod_classify_loop_server, "neg_classify_ui_1", r, reactive("neg"))
   
-  callModule(mod_cmodel_dir_server, "cmodel_dir_ui_1", r)
+  #callModule(mod_cmodel_dir_server, "cmodel_dir_ui_1", r)
   callModule(mod_create_model_server, "create_model_ui_1", r)
   callModule(mod_test_model_server, "test_model_ui_1", r)
   

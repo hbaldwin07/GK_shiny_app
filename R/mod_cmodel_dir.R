@@ -16,9 +16,11 @@
 mod_cmodel_dir_ui <- function(id){
   ns <- NS(id)
   tagList(
-    shinyFiles::shinyDirButton(ns("dir"), "Input directory", "Upload"),
-    verbatimTextOutput(ns("dir"), placeholder = TRUE)  
-  )
+    # shinyFiles::shinyDirButton(ns("dir"), "Input directory", "Upload"),
+    # verbatimTextOutput(ns("dir"), placeholder = TRUE)  
+    fluidRow(
+      fileInput(ns("file"), 'Select Training RDS Files',multiple = TRUE)
+  ))
 }
     
 # Module Server

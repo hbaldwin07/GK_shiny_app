@@ -20,8 +20,8 @@ mod_img_dir_ui <- function(id){
     # shinyDirButton(ns("dir"), "Input directory", "Upload"),
     # verbatimTextOutput(ns("dir"), placeholder = TRUE)  
     fluidRow(
-      fileInput(ns("file"), 'Choose Image Files',multiple = TRUE),
-      textOutput("(for segmentation & classification)")
+      fileInput(ns("file"), 'Select Image Files',multiple = TRUE),
+      textOutput("for segmentation & training")
     )
   )
 }
