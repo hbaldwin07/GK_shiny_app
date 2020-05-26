@@ -24,6 +24,7 @@
 #golem::add_module(name="img_dir")
 #golem::add_module(name="create_model")
 #golem::add_module(name="cmodel_dir")
+#golem::add_module(name="seg-img_load")
 
 ## 2.2 Add dependencies
 #uisethis::use_package("BiocInstaller")
@@ -33,12 +34,12 @@ usethis::use_package( "EBImage" )
 #usethis::use_package( "outliers" )
 usethis::use_package( "shinycssloaders" )
 #usethis::use_package( "shinyDND" )
-usethis::use_dev_package("shinyDirectoryInput")
+#usethis::use_dev_package("shinyDirectoryInput")
 usethis::use_package( "shinyjs" )
 #usethis::use_package( "gplots" )
 #usethis::use_package( "ROCR" )
 usethis::use_package( "e1071" )
-usethis::use_package("shinyFiles")
+#usethis::use_package("shinyFiles")
 
 
 ## 2.3 Add tests

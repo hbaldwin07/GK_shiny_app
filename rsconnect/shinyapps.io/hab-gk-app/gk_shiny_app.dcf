@@ -5,6 +5,6 @@ account: hab-gk-app
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2349872
-bundleId: 3184982
+bundleId: 3192080
 url: https://hab-gk-app.shinyapps.io/gk_shiny_app/
-when: 1590347509.53859
+when: 1590514749.53166

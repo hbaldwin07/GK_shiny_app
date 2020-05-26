@@ -1,5 +1,6 @@
 #' @import shiny
 #' @import EBImage
+#' @import shinyFiles
 app_server <- function(input, output,session) {
   # List the first level callModules here
   options(shiny.maxRequestSize=30*1024^2)
@@ -9,6 +10,7 @@ app_server <- function(input, output,session) {
   r <- reactiveValues()
   
   callModule(mod_img_dir_server, "img_dir_ui_1", r)
+  
   img1 <- reactive({callModule(mod_load_img_server, "load_img_ui_1", r, ix=reactive(1))})
   callModule(mod_display_ch_server, "display_ch_ui_1", img=img1(), n=reactive(1), r)
   callModule(mod_display_ch_server, "display_ch_ui_2", img=img1(), n=reactive(2), r)

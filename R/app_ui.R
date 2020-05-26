@@ -1,5 +1,6 @@
 #' @import shiny
 #' @import EBImage
+#' @import shinyFiles
 app_ui <- function() {
   tagList(
     # Leave this function for adding external resources
@@ -11,6 +12,8 @@ app_ui <- function() {
         tabPanel("Image Setup",
                  sidebarLayout(
                    sidebarPanel(
+                     #h4("Image files"),
+                     #h5("for segmentation & model creation"),
                      mod_img_dir_ui("img_dir_ui_1"),
                      actionButton("reset_input","Reset inputs"),
                      h4("Choose Channel Inputs"),

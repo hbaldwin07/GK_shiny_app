@@ -27,28 +27,41 @@ mod_load_img_ui <- function(id){
     
 mod_load_img_server <- function(input, output, session, r, ix){
   ns <- session$ns
-  #browser()
   
-  path = reactive({
-    path = r$img_dir$path
-  })
-
-  f = reactive({
-    req(path())
-    #path = r$img_dir$path
-    #tifs = dir(paste0(path())[grep(".tif", dir(paste0("/",path())))])
-    #tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
-    tifs = dir(path())[grep(".tif", dir(path()))]
-    f = tifs
-    #browser()
-  })
+  # observeEvent(r$img_dir$files, {
+  #   files = r$img_dir$files
+  #   browser()
+  # })
+  
   img = reactive({
-    req(f(), path())
-    f = f()
-    i=as.numeric(ix())
-    readImage(paste0(path(), "/", f[i]))
+    files = r$img_dir$files
+    i = ix()
+    f = files[i,]
+    if (is.null(f))
+      return(NULL)
+    readImage(f$datapath, all=T)
   })
   return(img)
+  
+  # path = reactive({
+  #   path = r$img_dir$path
+  # })
+  # f = reactive({
+  #   req(path())
+  #   #path = r$img_dir$path
+  #   #tifs = dir(paste0(path())[grep(".tif", dir(paste0("/",path())))])
+  #   #tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
+  #   tifs = dir(path())[grep(".tif", dir(path()))]
+  #   f = tifs
+  #   #browser()
+  # })
+  # img = reactive({
+  #   req(f(), path())
+  #   f = f()
+  #   i=as.numeric(ix())
+  #   readImage(paste0(path(), "/", f[i]))
+  # })
+  # return(img)
   
   # observeEvent(ignoreNULL = TRUE, eventExpr = {r$img_dir$path}, 
   #              handlerExpr = {
