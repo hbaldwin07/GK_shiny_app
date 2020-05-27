@@ -1,5 +1,3 @@
-#' @import shiny
-#' @import EBImage
 app_server <- function(input, output,session) {
   # List the first level callModules here
   options(shiny.maxRequestSize=30*1024^2)
@@ -45,7 +43,7 @@ app_server <- function(input, output,session) {
   #   
   #   callModule(mod_dl_params_server, "dl_params_ui_1", r)
   # })
-
+  
   # img1 <- reactive({callModule(mod_load_img_server, "load_img_ui_1", r, ix=reactive(1))})
   # callModule(mod_display_ch_server, "display_ch_ui_1", img=img1(), n=reactive(1), r)
   # callModule(mod_display_ch_server, "display_ch_ui_2", img=img1(), n=reactive(2), r)
@@ -76,32 +74,32 @@ app_server <- function(input, output,session) {
   #callModule(mod_cmodel_dir_server, "cmodel_dir_ui_1", r)
   callModule(mod_create_model_server, "create_model_ui_1", r)
   callModule(mod_test_model_server, "test_model_ui_1", r)
-  
 
-  
   observe({
     r$button = input$button_n
   })
-
-  filenames = reactive({
-    path = r$img_dir$path
-    tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
-    filenames= as.list(tifs)
-  })
-  observe({
-    r$classify_input_int = input$int
-  })
-
+  
+  # filenames = reactive({
+  #   path = r$img_dir$path
+  #   tifs = dir(paste0(path)[grep(".tif", dir(paste0(path)))])
+  #   filenames= as.list(tifs)
+  # })
+  # observe({
+  #   r$classify_input_int = input$int
+  # })
+  
   data = data.frame()
   values= reactiveValues(data=data)
   #rv = reactiveValues()
   count = 0
-
+  
   observeEvent(input$button, {
+    #browser()
     count <<- count + 1
+    f = r$img_dir$files
     if (count == 0) {
       return(NULL)
-    } else if (count <= length(filenames())) {
+    } else if (count <= length(f)) {
       loop(count)
       table <- loop(count)
     }
@@ -112,12 +110,13 @@ app_server <- function(input, output,session) {
       values$data <- rbind(values$data, table())
     })
   })
-
+  
   observeEvent(input$button_n, {
+    f = r$img_dir$files
     count <<- count + 1
     if (count == 0) {
       return(NULL)
-    } else if (count <= length(filenames())) {
+    } else if (count <= length(f)) {
       loop2(count)
       table2 <- loop2(count)
     }
@@ -128,7 +127,7 @@ app_server <- function(input, output,session) {
       values$data <- rbind(values$data, table2())
     })
   })
-
+  
   loop <- function(i) {
     img = reactive({callModule(mod_load_img_server, "temp", ix=reactive(i), r=r)})
     dapi = reactive({callModule(mod_norm_ch_server, "temp", img=img(), n=reactive(r$mod3$DAPI), r=r)})
@@ -145,10 +144,10 @@ app_server <- function(input, output,session) {
     cseg = reactive({callModule(mod_ph_segment_server, "temp", ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
     callModule(mod_classify_server, paste0("mod_classify_n_ui_", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("neg"), ix=reactive(i))
   }
-
+  
   output$dl_training_P <- downloadHandler(
     filename <- function() {
-     paste("positive_training.rds")
+      paste("positive_training.rds")
     },
     content <- function(file) {
       table <- values$data
@@ -164,49 +163,49 @@ app_server <- function(input, output,session) {
       saveRDS(table2, file=file)
     }
   )
-
-
+  
+  
   #callModule(mod_test_model_server, "test_model_1", r)
   
-   
+  
 }
 
-  
-  
-  
-  
 
-  
-    # lapply(1:length(filenames()), function(i) {
-    #   img = reactive({callModule(mod_load_img_server, paste0("load_img_", i), ix=reactive(i), r=r)})
-    #   dapi = reactive({callModule(mod_norm_ch_server, paste0("norm_ch_dapi_", i), img=img(), n=reactive(r$mod3$DAPI), r=r)})
-    #   pheno = reactive({callModule(mod_norm_ch_server, paste0("norm_ch_pheno_", i), img=img(), n=reactive(r$mod3$GFP), r=r)})
-    #   nseg = reactive({callModule(mod_n_segment_server, paste0("n_seg_", i), nuc_norm=dapi(), params=reactive(r$mod4), r=r)})
-    #   cseg = reactive({callModule(mod_ph_segment_server, paste0("c_seg_", i), ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
-    #   callModule(mod_classify_server, paste0("p", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))
-    #   temp_table = callModule(mod_classify_server, paste0("p", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))
-    #   output$pos_class_ui <- renderUI({
-    #     return(mod_classify_ui(paste0("p", count)))})
-    #   observeEvent(input$button_save, {
-    #     isolate({ values = rbind(values$df, temp_table())})
-    #   })
 
-  # 
-  # observe({
-  #   for (i in 1:length(filenames())) {
-  #     isolate({
-  #       images[[i]] = callModule(mod_load_img_server, paste0("load_img_", i), ix=reactive(i), r=r)
-  #     })
-  #   }
-  # })
-  # browser()
-  # 
-  # observeEvent(input$button, {
-  #   i=1
-  #   callModule(mod_norm_ch_server, paste0("norm_ch_dapi_", i), img=reactive(images[[i]]), n=reactive(r$mod3$DAPI), r=r)
-  #   output$pos_class_ui <- renderUI({
-  #     return(mod_norm_ch_ui(paste0("norm_ch_dapi_", i)))})
-  # })
+
+
+
+
+# lapply(1:length(filenames()), function(i) {
+#   img = reactive({callModule(mod_load_img_server, paste0("load_img_", i), ix=reactive(i), r=r)})
+#   dapi = reactive({callModule(mod_norm_ch_server, paste0("norm_ch_dapi_", i), img=img(), n=reactive(r$mod3$DAPI), r=r)})
+#   pheno = reactive({callModule(mod_norm_ch_server, paste0("norm_ch_pheno_", i), img=img(), n=reactive(r$mod3$GFP), r=r)})
+#   nseg = reactive({callModule(mod_n_segment_server, paste0("n_seg_", i), nuc_norm=dapi(), params=reactive(r$mod4), r=r)})
+#   cseg = reactive({callModule(mod_ph_segment_server, paste0("c_seg_", i), ph_norm=pheno(), params=reactive(r$mod6), nseg=nseg(), r=r)})
+#   callModule(mod_classify_server, paste0("p", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))
+#   temp_table = callModule(mod_classify_server, paste0("p", i), r=r, img=img(), cell_seg=cseg(), ph_norm=pheno(), classify=reactive("pos"))
+#   output$pos_class_ui <- renderUI({
+#     return(mod_classify_ui(paste0("p", count)))})
+#   observeEvent(input$button_save, {
+#     isolate({ values = rbind(values$df, temp_table())})
+#   })
+
+# 
+# observe({
+#   for (i in 1:length(filenames())) {
+#     isolate({
+#       images[[i]] = callModule(mod_load_img_server, paste0("load_img_", i), ix=reactive(i), r=r)
+#     })
+#   }
+# })
+# browser()
+# 
+# observeEvent(input$button, {
+#   i=1
+#   callModule(mod_norm_ch_server, paste0("norm_ch_dapi_", i), img=reactive(images[[i]]), n=reactive(r$mod3$DAPI), r=r)
+#   output$pos_class_ui <- renderUI({
+#     return(mod_norm_ch_ui(paste0("norm_ch_dapi_", i)))})
+# })
 
 #   output$test = renderUI{
 #     
@@ -357,4 +356,3 @@ app_server <- function(input, output,session) {
 # 
 #   #
 #   # 
-

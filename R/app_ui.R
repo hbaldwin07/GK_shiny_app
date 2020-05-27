@@ -57,6 +57,7 @@ app_ui <- function() {
         tabPanel("Image Classification",
                  tabsetPanel(
                    tabPanel("Positive",
+                            #mod_classify_loop_ui("classify_loop_ui_1")
                             sidebarLayout(
                               sidebarPanel(
                                 actionButton(("button"), label="Load Image / Save"),
@@ -74,7 +75,8 @@ app_ui <- function() {
                               mainPanel(
                                 uiOutput("pos_class_ui"))
                               )
-                            ), 
+                            )
+                   ,
                      tabPanel("Negative",
                               sidebarLayout(
                                 sidebarPanel(

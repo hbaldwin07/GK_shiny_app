@@ -1,5 +1,5 @@
 # Module UI
-  
+
 #' @title   mod_classify_ui and mod_classify_server
 #' @description  A shiny Module.
 #'
@@ -16,17 +16,17 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    # h4(textOutput(ns("text2"))),
-    # br(),
+    h4(textOutput(ns("text2"))),
+    br(),
     plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
 }
-    
+
 # Module Server
-    
+
 #' @rdname mod_classify
 #' @export
 #' @keywords internal
-    
+
 mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify, ix){
   ns <- session$ns
   #browser()
@@ -36,7 +36,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
       text2 = "Select Positive Examples"
     } else {text2 = "Select Negative Examples"}
   })
-
+  
   seg_out <- reactive({
     #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     seg_out = paintObjects(cell_seg(),toRGB(ph_norm()* r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
@@ -57,7 +57,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
       c(dest_coords$x[n], dest_coords$y[n])
     }))
   })
-
+  
   output$image <- renderPlot({
     par(bg=NA)
     plot.new()
@@ -119,13 +119,13 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   #     }) 
   #   }
   # })
-
+  
   observeEvent(r$button, {
-      count <<- count + 1
-      if (count > 1) {
-        modvalues$new_rows <- data.frame(rds_training())
-      }
-    })
+    count <<- count + 1
+    if (count > 1) {
+      modvalues$new_rows <- data.frame(rds_training())
+    }
+  })
   
   return(reactive({modvalues$new_rows}))
   
@@ -134,10 +134,9 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   # })
   # return(rds_training)
 }
-    
+
 ## To be copied in the UI
 # mod_classify_ui("classify_ui_1")
-    
+
 ## To be copied in the server
 # callModule(mod_classify_server, "classify_ui_1")
- 

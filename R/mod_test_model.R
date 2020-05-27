@@ -1,5 +1,5 @@
 # Module UI
-  
+
 #' @title   mod_test_model_ui and mod_test_model_server
 #' @description  A shiny Module.
 #'
@@ -32,13 +32,13 @@ mod_test_model_ui <- function(id){
     )
   )
 }
-    
+
 # Module Server
-    
+
 #' @rdname mod_test_model
 #' @export
 #' @keywords internal
-    
+
 mod_test_model_server <- function(input, output, session, r){
   ns <- session$ns
   
@@ -77,7 +77,7 @@ mod_test_model_server <- function(input, output, session, r){
     r$test$dapi = param()$DAPI
     r$test$ph = param()$GFP
   })
-
+  
   dapi_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_a", img=reactive(img()), n=reactive(r$test$dapi), r=r)
   ph_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_b", img=reactive(img()), n=reactive(r$test$ph), r)
   nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=reactive(dapi_norm()), params=reactive(param()), r)
@@ -103,7 +103,7 @@ mod_test_model_server <- function(input, output, session, r){
   })
   
   new_cseg = callModule(mod_ph_segment_server, "ph_segment_ui_a", ph_norm=reactive(ph_norm()), params=reactive(param()), nseg=reactive(new_nseg()), r)
-
+  
   table_test =  reactive({
     table_test_shape = computeFeatures.shape(new_cseg(),ph_norm())
     table_test_moment = computeFeatures.moment(new_cseg(),ph_norm())
@@ -164,8 +164,8 @@ mod_test_model_server <- function(input, output, session, r){
   })
   
   
-
-
+  
+  
   # 
   # nseg = reactive({
   #   #browser()
@@ -188,7 +188,7 @@ mod_test_model_server <- function(input, output, session, r){
   # nseg = reactive({
   #   ll = param()
   #   callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=dapi_norm(), params=reactive(ll), r)})
- 
+  
   # new_cseg = reactive({callModule(mod_ph_segment_server, "ph_segment_ui_a", ph_norm=pheno_norm(), params=reactive(params), nseg=new_nseg(), r)})
   #   
   # table_test =  reactive({
@@ -198,7 +198,7 @@ mod_test_model_server <- function(input, output, session, r){
   #   table_test= data.frame(cbind(table_test_basic,table_test_moment,table_test_shape))
   # })
   # 
-
+  
   # 
   # cseg_pos = reactive({
   #   ll.temp = list()
@@ -237,12 +237,11 @@ mod_test_model_server <- function(input, output, session, r){
   #   pos_out = paintObjects(seg_selected, toRGB(ph_n), opac=c(1,0.8),col=c("Green",NA),thick=TRUE,closed=FALSE)
   #   plot(pos_out())
   # })
-
+  
 }
-    
+
 ## To be copied in the UI
 # mod_test_model_ui("test_model_ui_1")
-    
+
 ## To be copied in the server
 # callModule(mod_test_model_server, "test_model_ui_1")
- 
