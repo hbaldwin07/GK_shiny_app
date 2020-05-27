@@ -7,7 +7,7 @@
 \usage{
 mod_classify_loop_ui(id)
 
-mod_classify_loop_server(input, output, session, r, classify)
+mod_classify_loop_server(input, output, session, r, classify, n)
 }
 \arguments{
 \item{id}{shiny id}

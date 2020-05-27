@@ -15,8 +15,7 @@ mod_classify_server(
   img,
   cell_seg,
   ph_norm,
-  classify,
-  ix
+  classify
 )
 }
 \arguments{

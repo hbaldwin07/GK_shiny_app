@@ -27,7 +27,7 @@ mod_classify_ui <- function(id){
 #' @export
 #' @keywords internal
 
-mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify, ix){
+mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify){
   ns <- session$ns
   #browser()
   
@@ -39,6 +39,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   
   seg_out <- reactive({
     #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    #seg_out = paintObjects(cell_seg,toRGB(ph_norm*r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     seg_out = paintObjects(cell_seg(),toRGB(ph_norm()* r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
   })
   
@@ -57,7 +58,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
       c(dest_coords$x[n], dest_coords$y[n])
     }))
   })
-  
+
   output$image <- renderPlot({
     par(bg=NA)
     plot.new()
@@ -76,6 +77,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   
   xy <- reactive({
     xy <- computeFeatures.moment(cell_seg())[,c('m.cx','m.cy')]
+    #xy <- computeFeatures.moment(cell_seg)[,c('m.cx','m.cy')]
   })
   
   rds_training <- reactive({
@@ -95,6 +97,9 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   })
   
   table_test <- reactive({
+    # table_test_shape = computeFeatures.shape(cell_seg,ph_norm)
+    # table_test_moment = computeFeatures.moment(cell_seg,ph_norm)
+    # table_test_basic = computeFeatures.basic(cell_seg,ph_norm)
     table_test_shape = computeFeatures.shape(cell_seg(),ph_norm())
     table_test_moment = computeFeatures.moment(cell_seg(),ph_norm())
     table_test_basic = computeFeatures.basic(cell_seg(),ph_norm())
@@ -117,6 +122,13 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   #     output$text = renderText({
   #       text = paste0("# cells selected: ", n_classified())
   #     }) 
+  #   }
+  # })
+  
+  # observeEvent(r$button, {
+  #   count <<- count + 1
+  #   if (count > 1) {
+  #     modvalues$new_rows <- data.frame(rds_training())
   #   }
   # })
   

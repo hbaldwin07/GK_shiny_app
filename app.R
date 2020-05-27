@@ -5,3 +5,4 @@
 pkgload::load_all()
 options( "golem.app.prod" = TRUE)
 svm2::run_app() # add parameters here (if any)
+

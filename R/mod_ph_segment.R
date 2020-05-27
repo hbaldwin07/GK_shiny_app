@@ -40,6 +40,7 @@ mod_ph_segment_ui <- function(id){
 mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, nseg){
   ns <- session$ns
   cell_norm <- reactive({
+    #browser()
     cell_norm= ph_norm()*params()$ph_int
   })
 
@@ -61,11 +62,14 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
     size_s <- params()$ph_size_s
     size_l <- params()$ph_size_l
     combine <- cmask()
-    #n_seg <- imageData(nseg())
+    #n_seg <- imageData(nseg)
+    # combine[omask()>cmask()] <- omask()[omask()>cmask()]
+    # combine[nseg > combine] <- nseg[nseg>combine]
+    # cseg = propagate(cell_norm(), nseg, mask=combine)
+    #browser()
     combine[omask()>cmask()] <- omask()[omask()>cmask()]
     combine[nseg() > combine] <- nseg()[nseg()>combine]
     cseg = propagate(cell_norm(), nseg(), mask=combine)
-    #combine[n_seg > combine] <- n_seg[n_seg>combine]
     cseg <- fillHull(cseg)
     xy <- computeFeatures.moment(cseg)[,c('m.cx', 'm.cy')]
     cf <- computeFeatures.shape(cseg)
@@ -79,10 +83,9 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
     ids <- unique(border[which(border!=0)])
     cell_seg <- rmObjects(cseg, ids)
   })
-  seg_out <- reactive({
-    # seg_out = paintObjects(cell_seg(),toRGB(cell_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
-    seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
-  })
+  # seg_out <- reactive({
+  #   seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+  # })
   output$cell_norm <- renderPlot({
     plot(cell_norm())
     mtext("Phenotype Channel", side=3, cex=1.5)
@@ -90,12 +93,12 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
   output$mask <- renderPlot({
     plot(cmask())
     mtext("Mask:", side=3, line=1, cex=1.5)
-    mtext("Individual Cells", side=3)
+    #mtext("Individual Cells", side=3)
   })
   output$omask <- renderPlot({
     plot(omask())
     mtext("Mask:", side=3, line=1, cex=1.5)
-    mtext("Global Outline", side=3)
+    #mtext("Global Outline", side=3)
   })
   output$color <- renderPlot({
     plot(colorLabels(cell_seg()))
@@ -103,7 +106,9 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
     #mtext("Color Label", side=3)
   })
   output$outline <- renderPlot({
-    plot(seg_out())
+    seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    #plot(seg_out())
+    plot(seg_out)
     #mtext("Final Seg", side=3, line=1, cex=1.25)
     #mtext("Outline", side=3)
   })

@@ -36,6 +36,7 @@ mod_n_segment_ui <- function(id){
 mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
   ns <- session$ns
   nmask2 <- reactive({
+    #browser()
     wh <- as.numeric(params()$nuc_wh)
     gm <- as.numeric(params()$nuc_gm)
     filter <- as.numeric(params()$nuc_filter)

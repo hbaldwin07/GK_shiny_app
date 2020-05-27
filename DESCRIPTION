@@ -18,11 +18,9 @@ Imports:
     yaImpute,
     EBImage,
     shinycssloaders,
-    shinyDirectoryInput (>= 0.2.0),
     shinyjs,
     e1071,
     pkgload,
-    shinyFiles
 RoxygenNote: 7.0.2
 Suggests: 
     testthat (>= 2.1.0),
@@ -30,4 +28,3 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Remotes: 
-    wleepang/shiny-directory-input
