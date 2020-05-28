@@ -1,5 +1,5 @@
-Package: svm2
-Title: PKG_TITLE
+Package: AIPS_SVM
+Title: Create a SVM Classification Model
 Version: 0.0.0.9000
 Authors@R: person('AUTHOR_FIRST', 'AUTHOR_LAST', email = 'AUTHOR@MAIL.COM', role = c('cre', 'aut'))
 Description: PKG_DESC.
@@ -28,3 +28,5 @@ Suggests:
     rmarkdown
 VignetteBuilder: knitr
 Remotes: 
+URL: https://github.com/hbaldwin07/GK_shiny_app
+BugReports: https://github.com/hbaldwin07/GK_shiny_app/issues
