@@ -58,21 +58,21 @@ mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
   })
   output$dapi_normal <- renderPlot({
     plot(nuc_norm()*params()$nuc_int)
-    mtext("Nucleus Channel", side=3, cex=1.5)
+    #mtext("Nucleus Channel", side=3, cex=1.5)
   })
   output$mask <- renderPlot({
     plot(nmask2())
-    mtext("Mask", side=3, cex=1.5)
+    #mtext("Mask", side=3, cex=1.5)
   })
   output$color <- renderPlot({
     plot(colorLabels(nseg()))
-    mtext("Final Seg", side=3, line=1, cex=1.5)
-    mtext("Color Label", side=3)
+    # mtext("Final Seg", side=3, line=1, cex=1.5)
+    # mtext("Color Label", side=3)
   })
   output$outline <- renderPlot({
     plot(seg())
-    mtext("Final Seg", side=3, line=1, cex=1.5)
-    mtext("Outline", side=3)
+    # mtext("Final Seg", side=3, line=1, cex=1.5)
+    # mtext("Outline", side=3)
   })
   return(nseg)
 }

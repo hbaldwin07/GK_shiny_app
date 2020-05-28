@@ -40,7 +40,7 @@ mod_display_ch_server <- function(input, output, session, img, n, r){
     ch_f<- normalize(chA, ft=c(0,1), c(minCH, maxCH))
   })
   output$ch <- renderPlot({
-    req(ch_f())
+    #req(ch_f())
     plot(ch_f()*input$int)
   })
 }

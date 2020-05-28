@@ -17,11 +17,13 @@ mod_ph_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      column(4, plotOutput(ns("cell_norm"))),
-      column(4, plotOutput(ns("mask"))),
-      column(4, plotOutput(ns("omask")))
+      # column(4, plotOutput(ns("cell_norm"))),
+      # column(4, plotOutput(ns("mask"))),
+      # column(4, plotOutput(ns("omask")))
+      column(6, plotOutput(ns("mask"))),
+      column(6, plotOutput(ns("omask")))
     ),
-    fluidRow(h4("Final Segmentation")),
+    #fluidRow(h4("Final Segmentation")),
     fluidRow(
       column(6, plotOutput(ns("color"))),
       column(6, plotOutput(ns("outline")))
@@ -86,18 +88,18 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
   # seg_out <- reactive({
   #   seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
   # })
-  output$cell_norm <- renderPlot({
-    plot(cell_norm())
-    mtext("Phenotype Channel", side=3, cex=1.5)
-  })
+  # output$cell_norm <- renderPlot({
+  #   plot(cell_norm())
+  #   #mtext("Phenotype Channel", side=3, cex=1.5)
+  # })
   output$mask <- renderPlot({
     plot(cmask())
-    mtext("Mask:", side=3, line=1, cex=1.5)
+    #mtext("Mask:", side=3, line=1, cex=1.5)
     #mtext("Individual Cells", side=3)
   })
   output$omask <- renderPlot({
     plot(omask())
-    mtext("Mask:", side=3, line=1, cex=1.5)
+    #mtext("Mask:", side=3, line=1, cex=1.5)
     #mtext("Global Outline", side=3)
   })
   output$color <- renderPlot({

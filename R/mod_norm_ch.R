@@ -45,7 +45,7 @@ mod_norm_ch_server <- function(input, output, session, n, img, r){
     index = as.numeric(x)
   })
   ch_normal <- reactive({
-    #req(img())
+    req(img())
     size = as.numeric(dim(img()))
     ch<-img()[1:size[1],1:size[2],index()]
     #ch <- img()[,,index()]

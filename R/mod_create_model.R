@@ -19,16 +19,15 @@ mod_create_model_ui <- function(id){
     sidebarLayout(
       sidebarPanel(
         fileInput(ns("files"), 'Select (both) Training RDS Files',multiple = TRUE),
-        div("# Positive Class Cells:",
-            textOutput(ns("pos_n"))),
+        div("# Positive Class Cells:", textOutput(ns("pos_n"))),
         br(),
-        div("# Negative Class Cells:",
-            textOutput(ns("neg_n"))),
+        div("# Negative Class Cells:",textOutput(ns("neg_n"))),
         downloadButton(ns("model"), "Save model file")
       ),
       mainPanel(
-        h4("PCA Plot"),
-        plotOutput(ns("PCA"), width="100%", height="800px")
+        #h4("PCA Plot"),
+        #plotOutput(ns("PCA"), width="100%", height="800px")
+        plotOutput(ns("PCA"))
       )
     )
   )
@@ -109,9 +108,11 @@ mod_create_model_server <- function(input, output, session, r){
                        axis.line=ggplot2::element_line(color="black", size=1),
                        panel.border=ggplot2::element_blank(), panel.background = ggplot2::element_blank()) +
         ggplot2::labs(title="PCA: feature selection") +
-        ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5), panel.grid.minor=ggplot2::element_line(color="white"), legend.position = "none")
-      tryCatch(g1, message="Loading...")
+        ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5), 
+                       panel.grid.minor=ggplot2::element_line(color="white"), legend.position = "none")
+      tryCatch(g1, nessage="Loading...")
     })
+    
     mymodel <- reactive({
       x <- (Ts.training()[,2:12])
       y <- Ts.training()[,21]
