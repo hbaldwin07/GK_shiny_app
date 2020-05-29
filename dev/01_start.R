@@ -8,15 +8,15 @@
 ## 
 ## Add information about the package that will contain your app
 
-golem::fill_desc(
-  pkg_name = "svm2", # The Name of the package containing the App 
-  pkg_title = "PKG_TITLE", # The Title of the package containing the App 
-  pkg_description = "PKG_DESC.", # The Description of the package containing the App 
-  author_first_name = "AUTHOR_FIRST", # Your First Name
-  author_last_name = "AUTHOR_LAST",  # Your Last Name
-  author_email = "AUTHOR@MAIL.COM",      # Your Email
-  repo_url = NULL # The (optional) URL of the GitHub Repo
-)     
+# golem::fill_desc(
+#   pkg_name = "SVMshiny", # The Name of the package containing the App 
+#   pkg_title = "Create a SVM Classification Model", # The Title of the package containing the App 
+#   pkg_description = "PKG_DESC.", # The Description of the package containing the App 
+#   author_first_name = "AUTHOR_FIRST", # Your First Name
+#   author_last_name = "AUTHOR_LAST",  # Your Last Name
+#   author_email = "AUTHOR@MAIL.COM",      # Your Email
+#   repo_url = "https://github.com/hbaldwin07/GK_shiny_app" # The (optional) URL of the GitHub Repo
+# )     
 
 ## Use this desc to set {golem} options
 
@@ -56,8 +56,8 @@ golem::use_recommended_deps()
 #golem::use_favicon() # path = "path/to/ico". Can be an online file. 
 
 # Add helper functions 
-golem::use_utils_ui()
-golem::use_utils_server()
+#golem::use_utils_ui()
+#golem::use_utils_server()
 
 # You're now set! 
 # go to dev/02_dev.R

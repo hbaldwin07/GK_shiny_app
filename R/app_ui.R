@@ -6,7 +6,7 @@ app_ui <- function() {
     golem_add_external_resources(),
     # List the first level UI elements here 
     fluidPage(
-      h1("svm2"),
+      h1("SVM Cell Classification Model"),
       tabsetPanel(
         tabPanel("Image Setup",
                  sidebarLayout(
@@ -286,12 +286,12 @@ app_ui <- function() {
 golem_add_external_resources <- function(){
   
   addResourcePath(
-    'www', system.file('app/www', package = 'svm2')
+    'www', system.file('app/www', package = 'SVMshiny')
   )
   
   tags$head(
     golem::activate_js(),
-    golem::favicon()
+    #golem::favicon()
     # Add here all the external resources
     # If you have a custom.css in the inst/app/www
     # Or for example, you can add shinyalert::useShinyalert() here

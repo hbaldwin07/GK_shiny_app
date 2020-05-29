@@ -1,4 +1,4 @@
-Package: svm2
+Package: SVMshiny
 Title: Create a SVM Classification Model
 Version: 0.0.0.9000
 Authors@R: person('AUTHOR_FIRST', 'AUTHOR_LAST', email = 'AUTHOR@MAIL.COM', role = c('cre', 'aut'))
@@ -21,7 +21,7 @@ Imports:
     shinyjs,
     e1071,
     pkgload,
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Suggests: 
     testthat (>= 2.1.0),
     knitr,
