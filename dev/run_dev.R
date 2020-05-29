@@ -10,3 +10,9 @@ golem::document_and_reload()
 
 # Run the application
 SVMshiny::run_app()
+
+
+
+# 
+# x = readRDS("~/Downloads/positive_training (8).rds")
+# subset(x, x$predict=="P")

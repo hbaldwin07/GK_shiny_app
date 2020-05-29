@@ -26,47 +26,38 @@ app_server <- function(input, output,session) {
   pseg = callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm, params=reactive(r$mod6), nseg=nseg, r)
   callModule(mod_dl_params_server, "dl_params_ui_1", r)
   
-  data = data.frame()
-  values= reactiveValues(data=data)
+  observe({
+    r$button = input$button
+    r$int = input$int
+  })
+  
+  # data = data.frame()
+  # values= reactiveValues(data=data)
   count = 0
   observeEvent(input$button, {
     #browser()
-    r$button = input$button
-    r$int = input$int
     count <<- count + 1
-    if (count == 0 | count > length(r$img_dir$files)) {
+    fn = nrow(r$img_dir$files)
+    # if (count == 0 | count > fn) {
+    #   return(NULL)
+    if (count == 0) {
       return(NULL)
-    } else {
+    } else if (count <= fn) {
       i = count
-      table = callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
-    }
-    output$pos_class_ui = renderUI({
-      return(mod_classify_loop_ui("mod_classify_loop_ui_1"))
-    })
-    observeEvent(table(), {
-      values$data <- rbind(values$data, table())
+      callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
+      # table = callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
+      #values$data <- rbind(values$data, table())
       #browser()
-    })
-  })
-  data2 = data.frame()
-  values2= reactiveValues(data=data2)
-  count2 = 0
-  observeEvent(input$button_n, {
-    r$button = input$button_n
-    r$int = input$int_n
-    count2 <<- count2 + 1
-    if (count2 == 0 | count2 > length(r$img_dir$files)) {
-      return(NULL)
-    } else {
-      i = count2
-      table2 = callModule(mod_classify_loop_server, "mod_classify_loop_ui_2", r=r, classify=reactive("neg"), n=reactive(i))
-    }
-    output$neg_class_ui = renderUI({
-      return(mod_classify_loop_ui("mod_classify_loop_ui_2"))
-    })
-    observeEvent(table2(), {
-      values2$data <- rbind(values2$data, table2())
-    })
+    } 
+    # else {
+    #   return(print("No more images"))
+    # }
+    # output$pos_class_ui = renderUI({
+    #   return(mod_classify_loop_ui("mod_classify_loop_ui_1"))
+    # })
+    # observeEvent(table(), {
+    #   values$data <- rbind(values$data, table())
+    # })
   })
   output$dl_training_P <- downloadHandler(
     filename <- function() {
@@ -77,15 +68,51 @@ app_server <- function(input, output,session) {
       saveRDS(table, file=file)
     }
   )
-  output$dl_training_N <- downloadHandler(
-    filename <- function() {
-      paste("negative_training.rds")
-    },
-    content <- function(file) {
-      table2 <- values2$data
-      saveRDS(table2, file=file)
-    }
-  )
+
+
+  # observeEvent(table(), {
+  #   values$data <- rbind(values$data, table())
+  #   #browser()
+  # })
+  
+  # data2 = data.frame()
+  # values2= reactiveValues(data=data2)
+  # count2 = 0
+  # observeEvent(input$button_n, {
+  #   r$button = input$button_n
+  #   r$int = input$int_n
+  #   count2 <<- count2 + 1
+  #   if (count2 == 0 | count2 > length(r$img_dir$files)) {
+  #     return(NULL)
+  #   } else {
+  #     i = count2
+  #     table2 = callModule(mod_classify_loop_server, "mod_classify_loop_ui_2", r=r, classify=reactive("neg"), n=reactive(i))
+  #   }
+  #   output$neg_class_ui = renderUI({
+  #     return(mod_classify_loop_ui("mod_classify_loop_ui_2"))
+  #   })
+  #   observeEvent(table2(), {
+  #     values2$data <- rbind(values2$data, table2())
+  #   })
+  # })
+  # output$dl_training_P <- downloadHandler(
+  #   filename <- function() {
+  #     paste("positive_training.rds")
+  #   },
+  #   content <- function(file) {
+  #     table <- values$data
+  #     saveRDS(table, file=file)
+  #   }
+  # )
+  # output$dl_training_N <- downloadHandler(
+  #   filename <- function() {
+  #     paste("negative_training.rds")
+  #   },
+  #   content <- function(file) {
+  #     table2 <- values2$data
+  #     saveRDS(table2, file=file)
+  #   }
+  # )
 
   callModule(mod_create_model_server, "create_model_ui_1", r)
   callModule(mod_test_model_server, "test_model_ui_1", r)

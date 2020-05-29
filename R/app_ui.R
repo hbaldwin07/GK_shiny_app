@@ -54,13 +54,17 @@ app_ui <- function() {
         tabPanel("Image Classification",
                  tabsetPanel(
                    tabPanel("Positive", 
-                            sidebarPanel(
-                              actionButton(("button"), label="Load Image / Save"),
-                              sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                              downloadButton(("dl_training_P"),label="Save (+) Classification File")
-                            ),
-                            mainPanel(uiOutput("pos_class_ui")
+                            sidebarLayout(
+                              sidebarPanel(
+                                actionButton(("button"), label="Load Image / Save"),
+                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                                downloadButton(("dl_training_P"),label="Save (+) Classification File")
+                              ),
+                              mainPanel(
+                                mod_classify_loop_ui("mod_classify_loop_ui_1")
+                              )
                             )
+                            
                    ),
                    tabPanel("Negative",
                             sidebarPanel(
