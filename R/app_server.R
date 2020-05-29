@@ -26,8 +26,11 @@ app_server <- function(input, output,session) {
   pseg = callModule(mod_ph_segment_server, "ph_segment_ui_1", ph_norm=pheno_norm, params=reactive(r$mod6), nseg=nseg, r)
   callModule(mod_dl_params_server, "dl_params_ui_1", r)
   
+  callModule(mod_create_model_server, "create_model_ui_1", r)
+  callModule(mod_test_model_server, "test_model_ui_1", r)
+  
+  
   observe({
-    r$button = input$button
     r$int = input$int
   })
   
@@ -35,30 +38,35 @@ app_server <- function(input, output,session) {
   # values= reactiveValues(data=data)
   count = 0
   observeEvent(input$button, {
-    #browser()
     count <<- count + 1
     fn = nrow(r$img_dir$files)
-    # if (count == 0 | count > fn) {
-    #   return(NULL)
     if (count == 0) {
       return(NULL)
-    } else if (count <= fn) {
-      i = count
-      callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
-      # table = callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
-      #values$data <- rbind(values$data, table())
-      #browser()
-    } 
-    # else {
-    #   return(print("No more images"))
+    }
+    validate(need(count <= fn, "No more Images!"))
+    callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(count))
+    # if (count == 0) {
+    #   return(NULL)
+    # } else if (count <= fn) {
+    #   i = count
+    #   callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
     # }
-    # output$pos_class_ui = renderUI({
-    #   return(mod_classify_loop_ui("mod_classify_loop_ui_1"))
-    # })
-    # observeEvent(table(), {
-    #   values$data <- rbind(values$data, table())
-    # })
+    })
+  
+  count2 = 0
+  observeEvent(input$button_n, {
+    count2 <<- count2 + 1
+    fn = nrow(r$img_dir$files)
+    if (count2 == 0) {
+      return(NULL)
+    } else if (count2 <= fn) {
+      i = count2
+      callModule(mod_classify_loop_server, "mod_classify_loop_ui_2", r=r, classify=reactive("neg"), n=reactive(i))
+    } else {
+      return(NULL)
+    }
   })
+  
   output$dl_training_P <- downloadHandler(
     filename <- function() {
       paste("positive_training.rds")
@@ -68,6 +76,33 @@ app_server <- function(input, output,session) {
       saveRDS(table, file=file)
     }
   )
+  output$dl_training_N <- downloadHandler(
+    filename <- function() {
+      paste("negative_training.rds")
+    },
+    content <- function(file) {
+      table2 <- values2$data
+      saveRDS(table2, file=file)
+    }
+  )
+}
+  
+
+  
+      # table = callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(i))
+      #values$data <- rbind(values$data, table())
+      #browser()
+    # else {
+    #   return(print("No more images"))
+    # }
+    # output$pos_class_ui = renderUI({
+    #   return(mod_classify_loop_ui("mod_classify_loop_ui_1"))
+    # })
+    # observeEvent(table(), {
+    #   values$data <- rbind(values$data, table())
+    # })
+  
+
 
 
   # observeEvent(table(), {
@@ -104,21 +139,9 @@ app_server <- function(input, output,session) {
   #     saveRDS(table, file=file)
   #   }
   # )
-  # output$dl_training_N <- downloadHandler(
-  #   filename <- function() {
-  #     paste("negative_training.rds")
-  #   },
-  #   content <- function(file) {
-  #     table2 <- values2$data
-  #     saveRDS(table2, file=file)
-  #   }
-  # )
 
-  callModule(mod_create_model_server, "create_model_ui_1", r)
-  callModule(mod_test_model_server, "test_model_ui_1", r)
-  
-}
-  
+
+
   
   
   

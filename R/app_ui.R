@@ -48,7 +48,10 @@ app_ui <- function() {
                          mod_ph_segment_ui("ph_segment_ui_1")
                        )
                      )
-                     )
+                     ), 
+            tabPanel("Save Image Parameters",
+                     mod_dl_params_ui("dl_params_ui_1")
+            )
           )
         ),
         tabPanel("Image Classification",
@@ -73,7 +76,7 @@ app_ui <- function() {
                               downloadButton(("dl_training_N"),label="Save (-) Classification File")
                             ),
                             mainPanel(
-                              uiOutput("neg_class_ui")
+                              mod_classify_loop_ui("mod_classify_loop_ui_2")
                             ))
                  )
         ),
