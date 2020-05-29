@@ -42,9 +42,12 @@ app_server <- function(input, output,session) {
     fn = nrow(r$img_dir$files)
     if (count == 0) {
       return(NULL)
+    } else if (count <= fn) {
+      callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(count))
     }
-    validate(need(count <= fn, "No more Images!"))
-    callModule(mod_classify_loop_server, "mod_classify_loop_ui_1", r=r, classify=reactive("pos"), n=reactive(count))
+    #validate(need(count <= fn, "No more Images!"))
+    
+    
     # if (count == 0) {
     #   return(NULL)
     # } else if (count <= fn) {
@@ -72,7 +75,7 @@ app_server <- function(input, output,session) {
       paste("positive_training.rds")
     },
     content <- function(file) {
-      table <- values$data
+      table <- r$loop$pos
       saveRDS(table, file=file)
     }
   )
@@ -81,7 +84,7 @@ app_server <- function(input, output,session) {
       paste("negative_training.rds")
     },
     content <- function(file) {
-      table2 <- values2$data
+      table2 <- r$loop$neg
       saveRDS(table2, file=file)
     }
   )
