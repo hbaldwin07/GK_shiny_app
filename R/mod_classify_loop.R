@@ -30,16 +30,34 @@ mod_classify_loop_server <- function(input, output, session, r, classify, n){
   ns <- session$ns
 
   r$loop = reactiveValues() 
-  
-  #browser()
+
   data = data.frame()
   values = reactiveValues(data=data)
   
+  if (r$par == TRUE) {
+    #browser()
+      param = reactive({
+        df.parameter <- r$csv
+        if (is.null(df.parameter))
+          return(NULL)
+        param <- read.csv(df.parameter$datapath, stringsAsFactors = F)
+      })
+      n_dapi = param()$DAPI
+      n_ph = param()$GFP
+      pars_ph = param()
+      pars_n = param()
+  } else {
+      n_dapi = r$mod3$DAPI
+      n_ph = r$mod3$GFP
+      pars_n = r$mod4
+      pars_ph = r$mod6
+  }
+  
   img = callModule(mod_load_img_server, "mod_img_temp", ix=n, r=r)
-  dapi = callModule(mod_norm_ch_server, "mod_dapi_temp", img=img, n=reactive(r$mod3$DAPI), r=r)
-  pheno = callModule(mod_norm_ch_server, "mod_pheno_temp", img=img, n=reactive(r$mod3$GFP), r=r)
-  nseg = callModule(mod_n_segment_server, "mod_nseg_temp", nuc_norm=dapi, params=reactive(r$mod4), r=r)
-  cseg = callModule(mod_ph_segment_server, "mod_cseg_temp", ph_norm=pheno, params=reactive(r$mod6), nseg=nseg, r=r)
+  dapi = callModule(mod_norm_ch_server, "mod_dapi_temp", img=img, n=reactive(n_dapi), r=r)
+  pheno = callModule(mod_norm_ch_server, "mod_pheno_temp", img=img, n=reactive(n_ph), r=r)
+  nseg = callModule(mod_n_segment_server, "mod_nseg_temp", nuc_norm=dapi, params=reactive(pars_n), r=r)
+  cseg = callModule(mod_ph_segment_server, "mod_cseg_temp", ph_norm=pheno, params=reactive(pars_ph), nseg=nseg, r=r)
   #browser()
   table = callModule(mod_classify_server, id="mod", r=r, img=img, cell_seg=cseg, ph_norm=pheno, classify=classify)
   #browser()

@@ -61,8 +61,8 @@ mod_test_model_server <- function(input, output, session, r){
     param <- read.csv(df.parameter$datapath, stringsAsFactors = F)
   })
 
-    dapi_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_a", img=reactive(img()), n=reactive(r$test$dapi), r=r)
-    ph_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_b", img=reactive(img()), n=reactive(r$test$ph), r)
+    dapi_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_a", img=reactive(img()), n=reactive(param()$DAPI), r=r)
+    ph_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_b", img=reactive(img()), n=reactive(param()$GFP), r)
     nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=reactive(dapi_norm()), params=reactive(param()), r)
     
     new_nseg = reactive({

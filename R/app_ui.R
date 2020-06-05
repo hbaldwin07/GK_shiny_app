@@ -9,24 +9,25 @@ app_ui <- function() {
       h1("SVM Cell Classification Model"),
       tabsetPanel(
         tabPanel("Image Setup",
-                 sidebarLayout(
-                   sidebarPanel(
-                     #h4("Image files"),
-                     #h5("for segmentation & model creation"),
-                     mod_img_dir_ui("img_dir_ui_1"),
-                     actionButton("reset_input","Reset inputs"),
-                     h4("Choose Channel Inputs"),
-                     mod_select_ch_ui("select_ch_ui_1")
-                   ),
-                   mainPanel(
-                     tabsetPanel(
-                       tabPanel("Channel 1", mod_display_ch_ui("display_ch_ui_1")),
-                       tabPanel("Channel 2", mod_display_ch_ui("display_ch_ui_2")),
-                       tabPanel("Channel 3", mod_display_ch_ui("display_ch_ui_3")),
-                       tabPanel("Channel 4", mod_display_ch_ui("display_ch_ui_4"))
-                     )
-                   )
-                 )),
+                 mod_img_setup_ui("img_setup_ui_1")
+                 # sidebarLayout(
+                 #   sidebarPanel(
+                 #     #h4("Select Image for Segmentation"),
+                 #     fileInput("img_file", 'Select Image for Segmentation', multiple = FALSE),
+                 #     #mod_img_dir_ui("img_dir_ui_1"),
+                 #     actionButton("reset_input","Reset inputs"),
+                 #     h4("Choose Channel Inputs"),
+                 #     mod_select_ch_ui("select_ch_ui_1")
+                 #   ),
+                 #   mainPanel(
+                 #     tabsetPanel(
+                 #       tabPanel("Channel 1", mod_display_ch_ui("display_ch_ui_1")),
+                 #       tabPanel("Channel 2", mod_display_ch_ui("display_ch_ui_2")),
+                 #       tabPanel("Channel 3", mod_display_ch_ui("display_ch_ui_3")),
+                 #       tabPanel("Channel 4", mod_display_ch_ui("display_ch_ui_4"))
+                 #     )
+                 #   )
+                 ),
         tabPanel("Segmentation",
           tabsetPanel(
             tabPanel("Nucleus Segmentation",
@@ -55,10 +56,18 @@ app_ui <- function() {
           )
         ),
         tabPanel("Image Classification",
+                 wellPanel(
+                   style = "padding: 1px; height: 20 px",
+                   fluidRow(
+                     column(6, checkboxInput("up_par", label = "Upload Segmentation Parameters?", value=FALSE) ),
+                     column(6,uiOutput("params_ui") )
+                   )
+                 ),
                  tabsetPanel(
                    tabPanel("Positive", 
                             sidebarLayout(
                               sidebarPanel(
+                                mod_img_dir_ui("img_dir_ui_1"),
                                 actionButton(("button"), label="Load Image / Save"),
                                 sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
                                 downloadButton(("dl_training_P"),label="Save (+) Classification File")
@@ -70,14 +79,18 @@ app_ui <- function() {
                             
                    ),
                    tabPanel("Negative",
-                            sidebarPanel(
-                              actionButton(("button_n"), label="Load Image / Save"),
-                              sliderInput(("int_n"), "Image Intensity:",1,500,100, step=5),
-                              downloadButton(("dl_training_N"),label="Save (-) Classification File")
-                            ),
-                            mainPanel(
-                              mod_classify_loop_ui("mod_classify_loop_ui_2")
-                            ))
+                            sidebarLayout(
+                              sidebarPanel(
+                                mod_img_dir_ui("img_dir_ui_2"),
+                                actionButton(("button_n"), label="Load Image / Save"),
+                                sliderInput(("int_n"), "Image Intensity:",1,500,100, step=5),
+                                downloadButton(("dl_training_N"),label="Save (-) Classification File")
+                              ),
+                              mainPanel(
+                                mod_classify_loop_ui("mod_classify_loop_ui_2")
+                              )
+                            )
+                           )
                  )
         ),
         tabPanel("Create Model",

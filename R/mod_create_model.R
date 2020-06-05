@@ -32,21 +32,7 @@ mod_create_model_ui <- function(id){
     )
   )
 }
-    
-  #   fluidRow(column(3,
-  #                   fileInput(ns("files"), 'Select (both) Training RDS Files',multiple = TRUE),
-  #          div("# Positive Class Cells:",
-  #              textOutput(ns("pos_n"))),
-  #          br(),
-  #          div("# Negative Class Cells:",
-  #              textOutput(ns("neg_n"))),
-  #          downloadButton(ns("model"), "Save model file")),
-  #   column(9,
-  #          h4("PCA Plot"),
-  #          plotOutput(ns("PCA"), width="100%", height="800px")))
-  # )
-#}
-    
+
 # Module Server
     
 #' @rdname mod_create_model
@@ -62,19 +48,9 @@ mod_create_model_server <- function(input, output, session, r){
     f2 = rds_files[2,]
     #browser()
     Ts.training_sum <- reactive({
-      #browser()
-      #path = path()
-      #rds <- dir(paste0(path)[grep(".rds", dir(paste0(path)))])
-      #Ts.training <- readRDS(paste0(path, "/", rds[1]))
       rds1 = readRDS(f1$datapath)
       rds2 = readRDS(f2$datapath)
       Ts.training_sum = rbind(rds1, rds2)
-      # Ts.training.sum <- Ts.training
-      # for (l in 2:length(rds)) {
-      #   #Ts.training <- readRDS(paste0(path, "/", rds[l]))
-      #   Ts.training.sum <- rbind(Ts.training.sum, Ts.training)
-      # }
-      #Ts.training_sum <- as.data.frame(Ts.training.sum)
     })
     pos_n <- reactive({
       length(which(Ts.training_sum()$predict=="P"))})
@@ -86,19 +62,25 @@ mod_create_model_server <- function(input, output, session, r){
 
     Ts.training <- reactive({
       #browser()
-      ind <- which(!Ts.training_sum()$predict=="0")
-      Ts.training_sum <- Ts.training_sum()[ind,]
-      Ts.training_sum <- Ts.training_sum[!duplicated(Ts.training_sum()[c("b.sd", "b.mad")]),]
+      Ts.training_sum = Ts.training_sum()
+      #Ts.training_sum <- Ts.training_sum()[!duplicated(Ts.training_sum()[c("b.sd", "b.mad")]),]
+      ind <- which(!Ts.training_sum$predict=="0")
+      Ts.training_sum <- Ts.training_sum[ind,]
+      
       ind.P <- which(Ts.training_sum$predict == "P")
       ind.N <- which(Ts.training_sum$predict == "N")
+      
       if (neg_n() > pos_n()) {
         Ts.training_sum_N <- Ts.training_sum[sample(ind.N, pos_n()),]
         Ts.training_sum_P <- Ts.training_sum[ind.P,]
-      } else {Ts.training_sum_N <- Ts.training_sum[ind.N, ]
-      Ts.training_sum_P <- Ts.training_sum[sample(ind.P, neg_n()),]}
+      } else {
+        Ts.training_sum_N <- Ts.training_sum[ind.N, ]
+        Ts.training_sum_P <- Ts.training_sum[sample(ind.P, neg_n()),]
+        }
       Ts.training <- rbind(Ts.training_sum_N, Ts.training_sum_P)
     })
     output$PCA <- renderPlot({
+      #browser()
       Ts <- Ts.training()
       colnames(Ts) <- c("rownameTable","mean intensity", "sd intensity", "mad intesity", "1% intensity", "5% intensity", "50% intensity","95% intensity","99 intensity","center of mass,x", "center of mass,y","major axis","eccentricity", "angle","area","perimeter","radius.mean","radius.sd","radius.min","radius.max","predict")
       myPr <- prcomp(Ts[,2:19], scale=TRUE)
@@ -110,7 +92,7 @@ mod_create_model_server <- function(input, output, session, r){
         ggplot2::labs(title="PCA: feature selection") +
         ggplot2::theme(plot.title=ggplot2::element_text(hjust=0.5), 
                        panel.grid.minor=ggplot2::element_line(color="white"), legend.position = "none")
-      tryCatch(g1, nessage="Loading...")
+      tryCatch(g1, message="Loading...")
     })
     
     mymodel <- reactive({

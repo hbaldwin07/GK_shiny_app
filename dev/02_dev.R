@@ -24,7 +24,7 @@
 #golem::add_module(name="img_dir")
 #golem::add_module(name="create_model")
 #golem::add_module(name="cmodel_dir")
-#golem::add_module(name="seg-img_load")
+golem::add_module(name="img_setup")
 
 ## 2.2 Add dependencies
 #usethis::use_package("BiocInstaller")
@@ -59,7 +59,7 @@ golem::browser_button()
 # 3. Documentation
 
 ## 3.1 Vignette
-usethis::use_vignette("svm2")
+usethis::use_vignette("SVMshiny")
 devtools::build_vignettes()
 
 ## 3.2 Code coverage
