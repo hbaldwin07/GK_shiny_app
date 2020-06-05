@@ -35,12 +35,18 @@ mod_n_segment_ui <- function(id){
     
 mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
   ns <- session$ns
+  
+  dapi_norm <- reactive({
+    #browser()
+    dapi_norm= nuc_norm()*params()$nuc_int
+  })
+  
   nmask2 <- reactive({
     #browser()
     wh <- as.numeric(params()$nuc_wh)
     gm <- as.numeric(params()$nuc_gm)
     filter <- as.numeric(params()$nuc_filter)
-    nmask0 = thresh(nuc_norm(), wh, wh, gm)
+    nmask0 = thresh(dapi_norm(), wh, wh, gm)
     mk3 = makeBrush(filter, shape= "diamond")
     nmask0 = opening(nmask0, mk3)
     nmask2 = fillHull(nmask0)
@@ -54,10 +60,10 @@ mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
     nseg=fillHull(nseg)
   })
   seg <- reactive({
-    seg = paintObjects(nseg(),toRGB(nuc_norm()),opac=c(1, 1),col=c("red",NA), thick=TRUE, closed=TRUE)
+    seg = paintObjects(nseg(),toRGB(dapi_norm()),opac=c(1, 1),col=c("red",NA), thick=TRUE, closed=TRUE)
   })
   output$dapi_normal <- renderPlot({
-    plot(nuc_norm()*params()$nuc_int)
+    plot(dapi_norm()*params()$nuc_int)
     #mtext("Nucleus Channel", side=3, cex=1.5)
   })
   output$mask <- renderPlot({
