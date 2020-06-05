@@ -60,10 +60,15 @@ mod_test_model_server <- function(input, output, session, r){
       return(NULL)
     param <- read.csv(df.parameter$datapath, stringsAsFactors = F)
   })
+  
+  output$model_img = renderPlot({
+    req(input$test_img, input$rds_file, input$csv_file)
+    plot(pos_out())
+  })
 
-    dapi_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_a", img=reactive(img()), n=reactive(param()$DAPI), r=r)
-    ph_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_b", img=reactive(img()), n=reactive(param()$GFP), r)
-    nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=reactive(dapi_norm()), params=reactive(param()), r)
+  dapi_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_a", img=reactive(img()), n=reactive(param()$DAPI), r=r)
+  ph_norm = callModule(mod_norm_ch_server, id="norm_ch_ui_b", img=reactive(img()), n=reactive(param()$GFP), r)
+  nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=reactive(dapi_norm()), params=reactive(param()), r)
     
     new_nseg = reactive({
       check = computeFeatures.shape(nseg())
@@ -139,10 +144,6 @@ mod_test_model_server <- function(input, output, session, r){
       seg_selected = cseg_pos()$segpos
       ph_n = var.list()$ph_norm
       pos_out = paintObjects(seg_selected, toRGB(ph_n*input$int), opac=c(1,0.8),col=c("Green",NA),thick=TRUE,closed=FALSE)
-    })
-    
-    output$model_img = renderPlot({
-      plot(pos_out())
     })
     
     xx<-reactive({
