@@ -18,7 +18,7 @@ mod_classify_ui <- function(id){
   tagList(
     h4(textOutput(ns("text2"))),
     br(),
-    sliderInput(("int"), "Image Intensity:",1,500,100, step=1),
+    sliderInput(ns("int"), "Image Intensity:",1,500,100, step=1),
     br(),
     plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
 }
