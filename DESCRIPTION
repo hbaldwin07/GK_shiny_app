@@ -28,6 +28,6 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-Remotes: 
+Remotes: [BiocManager::]EBImage
 URL: https://github.com/hbaldwin07/GK_shiny_app
 BugReports: https://github.com/hbaldwin07/GK_shiny_app/issues

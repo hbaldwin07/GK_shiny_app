@@ -18,6 +18,8 @@ mod_classify_ui <- function(id){
   tagList(
     h4(textOutput(ns("text2"))),
     br(),
+    sliderInput(("int"), "Image Intensity:",1,500,100, step=1),
+    br(),
     plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
 }
 
@@ -38,9 +40,9 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   })
 
   seg_out <- reactive({
-    #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     #seg_out = paintObjects(cell_seg,toRGB(ph_norm*r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
-    seg_out = paintObjects(cell_seg(),toRGB(ph_norm()* r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
+    #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
   })
 
   initX <-1

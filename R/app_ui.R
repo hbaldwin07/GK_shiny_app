@@ -69,7 +69,7 @@ app_ui <- function() {
                               sidebarPanel(
                                 mod_img_dir_ui("img_dir_ui_1"),
                                 actionButton(("button"), label="Load Image / Save"),
-                                sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
+                                #sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
                                 downloadButton(("dl_training_P"),label="Save (+) Classification File")
                               ),
                               mainPanel(
@@ -83,7 +83,7 @@ app_ui <- function() {
                               sidebarPanel(
                                 mod_img_dir_ui("img_dir_ui_2"),
                                 actionButton(("button_n"), label="Load Image / Save"),
-                                sliderInput(("int_n"), "Image Intensity:",1,500,100, step=5),
+                                #sliderInput(("int_n"), "Image Intensity:",1,500,100, step=5),
                                 downloadButton(("dl_training_N"),label="Save (-) Classification File")
                               ),
                               mainPanel(

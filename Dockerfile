@@ -18,6 +18,7 @@ RUN Rscript -e 'remotes::install_version("shinycssloaders",upgrade="never", vers
 RUN Rscript -e 'remotes::install_version("shinyjs",upgrade="never", version = "1.1")'
 RUN Rscript -e 'remotes::install_version("e1071",upgrade="never", version = "1.7-3")'
 RUN Rscript -e 'remotes::install_version("pkgload",upgrade="never", version = "1.0.2")'
+RUN Rscript -e 'remotes::install_version("shinyFeedback",upgrade="never", version = "0.2.0")'
 RUN Rscript -e 'remotes::install_version("testthat",upgrade="never", version = "2.3.2")'
 RUN Rscript -e 'remotes::install_version("knitr",upgrade="never", version = "1.28")'
 RUN Rscript -e 'remotes::install_version("rmarkdown",upgrade="never", version = "2.1")'
