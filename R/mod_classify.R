@@ -16,11 +16,13 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    h4(textOutput(ns("text2"))),
-    br(),
-    sliderInput(ns("int"), "Image Intensity:",1,500,100, step=1),
-    br(),
-    plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"))
+    
+    fluidRow(
+      plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"),
+      sliderInput(ns("int"), "Image Intensity:",1,500,100, step=1)
+    )
+    
+  )
 }
 
 # Module Server
@@ -32,19 +34,19 @@ mod_classify_ui <- function(id){
 mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_norm, classify){
   ns <- session$ns
   #browser()
-
+  
   output$text2 <- renderText({
     if (classify()=="pos") {
       text2 = "Select Positive Examples"
     } else {text2 = "Select Negative Examples"}
   })
-
+  
   seg_out <- reactive({
     seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*input$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     #seg_out = paintObjects(cell_seg,toRGB(ph_norm*r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     #seg_out = paintObjects(cell_seg(),toRGB(ph_norm()*r$int),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
   })
-
+  
   initX <-1
   initY <-2
   source_coords <- reactiveValues(xy=c(x=initX, y=initY))
@@ -60,7 +62,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
       c(dest_coords$x[n], dest_coords$y[n])
     }))
   })
-
+  
   output$image <- renderPlot({
     par(bg=NA)
     plot.new()
@@ -76,12 +78,12 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     points(source_coords$xy[1], source_coords$xy[2], cex=3, pch=intToUtf8(8962))
     text(dest_coords$x, dest_coords$y, paste0(DistCost()$Lost),col="red")
   })
-
+  
   xy <- reactive({
     xy <- computeFeatures.moment(cell_seg())[,c('m.cx','m.cy')]
     #xy <- computeFeatures.moment(cell_seg)[,c('m.cx','m.cy')]
   })
-
+  
   rds_training <- reactive({
     df <- data.frame(matrix(unlist(DistCost()), nrow=length(DistCost()$Lost), byrow=T))
     knn.out <- yaImpute::ann(as.matrix(xy()), as.matrix(df[2:nrow(df),]), k=2)
@@ -98,7 +100,7 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     Ts.training[row_n$V1, 21] <- classify1
     rds_training <- Ts.training
   })
-
+  
   table_test <- reactive({
     # table_test_shape = computeFeatures.shape(cell_seg,ph_norm)
     # table_test_moment = computeFeatures.moment(cell_seg,ph_norm)
@@ -110,9 +112,9 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
     rownameTable<-row.names(table_test)
     table_test<-data.frame(cbind(rownameTable,table_test))
   })
-
+  
   return(rds_training)
-
+  
   #modvalues <- reactiveValues(new_rows=NULL)
   #count = 0
   

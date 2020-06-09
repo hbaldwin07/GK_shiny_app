@@ -16,8 +16,8 @@
 mod_select_ch_ui <- function(id){
   ns <- NS(id)
   tagList(
-    selectInput(ns("DAPI"), "Dapi:",  c("ch1", "ch2", "ch3", "ch4")), 
-    selectInput(ns("GFP"), "Pheno:", c("ch1", "ch2", "ch3", "ch4"))
+    selectInput(ns("DAPI"), "Nuclei:",  c("ch1", "ch2", "ch3", "ch4")), 
+    selectInput(ns("GFP"), "Phenotype:", c("ch1", "ch2", "ch3", "ch4"))
   )
 }
     

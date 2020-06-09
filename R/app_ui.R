@@ -10,23 +10,6 @@ app_ui <- function() {
       tabsetPanel(
         tabPanel("Image Setup",
                  mod_img_setup_ui("img_setup_ui_1")
-                 # sidebarLayout(
-                 #   sidebarPanel(
-                 #     #h4("Select Image for Segmentation"),
-                 #     fileInput("img_file", 'Select Image for Segmentation', multiple = FALSE),
-                 #     #mod_img_dir_ui("img_dir_ui_1"),
-                 #     actionButton("reset_input","Reset inputs"),
-                 #     h4("Choose Channel Inputs"),
-                 #     mod_select_ch_ui("select_ch_ui_1")
-                 #   ),
-                 #   mainPanel(
-                 #     tabsetPanel(
-                 #       tabPanel("Channel 1", mod_display_ch_ui("display_ch_ui_1")),
-                 #       tabPanel("Channel 2", mod_display_ch_ui("display_ch_ui_2")),
-                 #       tabPanel("Channel 3", mod_display_ch_ui("display_ch_ui_3")),
-                 #       tabPanel("Channel 4", mod_display_ch_ui("display_ch_ui_4"))
-                 #     )
-                 #   )
                  ),
         tabPanel("Segmentation",
           tabsetPanel(
@@ -40,7 +23,7 @@ app_ui <- function() {
                        )
                      )
                      ),
-            tabPanel("Phenotype Segmentation",
+            tabPanel("Cell Segmentation",
                      sidebarLayout(
                        sidebarPanel(
                          mod_ph_params_ui("ph_params_ui_1")              
@@ -68,30 +51,32 @@ app_ui <- function() {
                             sidebarLayout(
                               sidebarPanel(
                                 mod_img_dir_ui("img_dir_ui_1"),
-                                actionButton(("button"), label="Load Image / Save"),
-                                #sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                                downloadButton(("dl_training_P"),label="Save (+) Classification File")
+                                actionButton(("button"), label="Load Image"),
+                                br(),
+                                br(),
+                                downloadButton(("dl_training_P"),label="Save (+) Classification File"),
                               ),
                               mainPanel(
+                                h4("Select Positive Cells"),
                                 mod_classify_loop_ui("mod_classify_loop_ui_1")
                               )
                             )
-                            
                    ),
-                   tabPanel("Negative",
+                   tabPanel("Negative", 
                             sidebarLayout(
                               sidebarPanel(
                                 mod_img_dir_ui("img_dir_ui_2"),
-                                actionButton(("button_n"), label="Load Image / Save"),
-                                #sliderInput(("int_n"), "Image Intensity:",1,500,100, step=5),
-                                downloadButton(("dl_training_N"),label="Save (-) Classification File")
+                                actionButton(("button_n"), label="Load Image"),
+                                downloadButton(("dl_training_N"),label="Save (-) Classification File"),
                               ),
                               mainPanel(
+                                h4("Select Nositive Cells"),
                                 mod_classify_loop_ui("mod_classify_loop_ui_2")
                               )
                             )
-                           )
+                   )
                  )
+                   
         ),
         tabPanel("Create Model",
                  mod_create_model_ui("create_model_ui_1")
