@@ -16,11 +16,8 @@
 mod_classify_ui <- function(id){
   ns <- NS(id)
   tagList(
-    
-    fluidRow(
-      plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"),
-      sliderInput(ns("int"), "Image Intensity:",1,500,100, step=1)
-    )
+    plotOutput(ns("image"), click=ns("plot_click"), width="500px", height="500px"),
+    sliderInput(ns("int"), "Image Intensity:",1,500,100, step=1)
     
   )
 }
