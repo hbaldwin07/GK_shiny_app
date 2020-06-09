@@ -24,10 +24,13 @@
 #golem::add_module(name="img_dir")
 #golem::add_module(name="create_model")
 #golem::add_module(name="cmodel_dir")
-golem::add_module(name="img_setup")
+#golem::add_module(name="img_setup")
+
+#install.packages("shinyWidgets")
 
 ## 2.2 Add dependencies
 #usethis::use_package("BiocInstaller")
+usethis::use_package("shinyWidgets")
 usethis::use_package( "BiocManager" )
 usethis::use_package("yaImpute")
 usethis::use_package( "EBImage" ) 

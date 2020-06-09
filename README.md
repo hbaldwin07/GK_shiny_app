@@ -63,8 +63,9 @@
       * Default directory is browser/computer determined 
 
 #### Classification
-  1. Check "Upload Segmentation Parameters" if you want to upload the parameters (csv) file
-  - If file is not loaded, the parameters set during the Image Setup/Segmentation steps will be used.
+  1. Click on red button to choose to upload segmentation parameters 
+  2. *Optional* Check "Upload Segmentation Parameters" if you want to upload the parameters (csv) file
+  - If file is not loaded, the parameters set during the Image Setup/Segmentation steps (in same session) will be used.
   
 >>>> You do not need to sequentially go through the Positive classification tab before the Negative, or vice versa. These can be performed in different sessions (assuming uploaded/previously set segmentation parameters)  
 

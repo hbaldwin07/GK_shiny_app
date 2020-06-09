@@ -21,8 +21,7 @@ app_ui <- function() {
                        mainPanel(
                          mod_n_segment_ui("n_segment_ui_1")
                        )
-                     )
-                     ),
+                     )),
             tabPanel("Cell Segmentation",
                      sidebarLayout(
                        sidebarPanel(
@@ -31,20 +30,17 @@ app_ui <- function() {
                        mainPanel(
                          mod_ph_segment_ui("ph_segment_ui_1")
                        )
-                     )
-                     ), 
+                     )), 
             tabPanel("Save Image Parameters",
                      mod_dl_params_ui("dl_params_ui_1")
-            )
-          )
+            ))
         ),
         tabPanel("Image Classification",
-                 wellPanel(
-                   style = "padding: 1px; height: 20 px",
-                   fluidRow(
-                     column(6, checkboxInput("up_par", label = "Upload Segmentation Parameters?", value=FALSE) ),
-                     column(6,uiOutput("params_ui") )
-                   )
+                 shinyWidgets::dropdownButton(
+                   checkboxInput("up_par", label = "Upload Segmentation Parameters?", value=FALSE),
+                   uiOutput("params_ui"), size = "sm",
+                   circle = TRUE, status = "danger", icon = icon("exclamation-triangle"), width = "200px",
+                   inline = TRUE, tooltip = TRUE, label = "Parameter Settings"
                  ),
                  tabsetPanel(
                    tabPanel("Positive", 
@@ -76,7 +72,6 @@ app_ui <- function() {
                             )
                    )
                  )
-                   
         ),
         tabPanel("Create Model",
                  mod_create_model_ui("create_model_ui_1")
@@ -85,207 +80,8 @@ app_ui <- function() {
                  mod_test_model_ui("test_model_ui_1"))
       )
     )
-  )
+    )
 }
-
-#          tabsetPanel(
-#            tabPanel("Positive",
-#                     sidebarLayout(
-#                       sidebarPanel(
-#                         actionButton(("button"), label="Load Image / Save"),
-#                         sliderInput(("int"), "Image Intensity:",1,500,100, step=5)
-#                         # ,
-#                         # downloadButton(("dl_training_P"),
-#                         #                label="Save Classification File")
-#                         #,
-#                         # HTML('<script type="text/javascript">
-#                         # $(document).ready(function() {
-#                         # $("#button").click(function() {
-#                         # $("#pos_class_ui").text("Loading...");
-#                         # });
-#                         # });
-#                         #      </script>')
-#                         ),
-#                       mainPanel(
-#                         #mod_classify_loop_ui("classify_loop_ui_1"))
-#                         uiOutput("class_ui")
-        # ,
-        # tabPanel("Image Segmentation",
-        #          tabsetPanel(
-        #            tabPanel("Nucleus Segmentation",
-        #                     sidebarLayout(
-        #                       sidebarPanel(
-        #                         mod_nuc_params_ui("nuc_params_ui_1")
-        #                       ),
-        #                       mainPanel(
-        #                         mod_n_segment_ui("n_segment_ui_1")
-        #                       )
-        #                     ))
-                   # ,
-                   # tabPanel( "Phenotype Segmentation",
-                   #           sidebarLayout(
-                   #             sidebarPanel(
-                   #               mod_ph_params_ui("ph_params_ui_1")
-                   #             ),
-                   #             mainPanel(
-                   #               mod_ph_segment_ui("ph_segment_ui_1")
-                   #             )
-                   #           )
-                   # ),
-                   # tabPanel("Save Image Parameters",
-                   #          mod_dl_params_ui("dl_params_ui_1")
-                   # )
-#                  )
-#         )
-#         #,
-#       )
-#     )
-#   )
-# }
-        # ,
-        # tabPanel("Image Segmentation",
-        #          tabsetPanel(
-        #            tabPanel("Nucleus Segmentation",
-        #                     sidebarLayout(
-        #                       sidebarPanel(
-        #                         mod_nuc_params_ui("nuc_params_ui_1")
-        #                       ),
-        #                       mainPanel(
-        #                         mod_n_segment_ui("n_segment_ui_1")
-        #                       )
-        #                     )),
-        #            tabPanel( "Phenotype Segmentation",
-        #                      sidebarLayout(
-        #                        sidebarPanel(
-        #                          mod_ph_params_ui("ph_params_ui_1")
-        #                        ),
-        #                        mainPanel(
-        #                          mod_ph_segment_ui("ph_segment_ui_1")
-        #                        )
-        #                      )
-        #            ),
-        #            tabPanel("Save Image Parameters",
-        #                     mod_dl_params_ui("dl_params_ui_1")
-        #            )
-        #          )
-        # ),
-        # tabPanel("Image Classification",
-        #          tabsetPanel(
-        #            tabPanel("Positive",
-        #                     sidebarLayout(
-        #                       sidebarPanel(
-        #                         actionButton(("button"), label="Load Image / Save"),
-        #                         sliderInput(("int"), "Image Intensity:",1,500,100, step=5)
-        #                         # ,
-        #                         # downloadButton(("dl_training_P"),
-        #                         #                label="Save Classification File")
-        #                         #,
-        #                         # HTML('<script type="text/javascript">
-        #                         # $(document).ready(function() {
-        #                         # $("#button").click(function() {
-        #                         # $("#pos_class_ui").text("Loading...");
-        #                         # });
-        #                         # });
-        #                         #      </script>')
-        #                         ),
-        #                       mainPanel(
-        #                         #mod_classify_loop_ui("classify_loop_ui_1"))
-        #                         uiOutput("class_ui")
-        #                       ))),
-        #                     
-        #              tabPanel("Negative",
-        #                       sidebarLayout(
-        #                         sidebarPanel(
-        #                           actionButton(("button_n"), "Load Image / Save"),
-        #                           sliderInput(("int_n"), "Image Intensity:",1,500,100, step=5)
-        #                           #,
-        #                           # downloadButton(("dl_training_N"), label="Save Classification File"),
-        #                           # HTML('<script type="text/javascript">
-        #                           # $(document).ready(function() {
-        #                           # $("#button_n").click(function() {
-        #                           # $("#neg_class_ui").text("Loading...");
-        #                           # });
-        #                           # });
-        #                           #      </script>')),
-        #                         ),
-        #                         mainPanel(
-        #                           uiOutput("neg_class_ui"))
-        #                       )))),
-        # tabPanel("Create Model", 
-        #          # fluidRow(
-        #          #   mod_cmodel_dir_ui("cmodel_dir_ui_1")
-        #          # ),
-        #          fluidRow(
-        #            mod_create_model_ui("create_model_ui_1")
-        #          )
-        # ),
-        # tabPanel("Test Model",
-        #          mod_test_model_ui("test_model_ui_1")
-        # )
-#       )
-#     )
-#   )
-# }
-        
-        # tabPanel("Image Classification",
-        #          tabsetPanel(
-        #            tabPanel("Positive",
-        #                     sidebarLayout(
-        #                       sidebarPanel(
-        #                         actionButton(("button"), label="Load Image / Save"),
-        #                         sliderInput(("int"), "Image Intensity:",1,500,100, step=5)),
-        #                         # ,
-        #                         # downloadButton(("dl_training_P"),
-        #                         #                label="Save Classification File"),
-        #                         # HTML('<script type="text/javascript">
-        #                         # $(document).ready(function() {
-        #                         # $("#button").click(function() {
-        #                         # $("#pos_class_ui").text("Loading...");
-        #                         # });
-        #                         # });
-        #                         #      </script>')
-        #                         # ),
-        #                       mainPanel(
-        #                         mod_classify_loop_ui("pos_classify_ui_1"))))),
-                   
-                            
-                           # mod_classify_loop_ui("pos_classify_ui_1")
-                            # sidebarLayout(
-                            #   sidebarPanel(
-                            #     actionButton(("button"), label="Load Image / Save"),
-                            #     sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                            #     downloadButton(("dl_training_P"), 
-                            #                    label="Save Classification File"),
-                            #     HTML('<script type="text/javascript">
-                            #     $(document).ready(function() {
-                            #     $("#button").click(function() {
-                            #     $("#pos_class_ui").text("Loading...");
-                            #     });
-                            #     });
-                            #          </script>')
-                            #     ),
-                            #   mainPanel(
-                            #     uiOutput("pos_class_ui"))
-                 #            )),
-                 #   tabPanel("Negative",
-                 #            mod_classify_loop_ui("neg_classify_ui_1")
-                 #            # sidebarLayout(
-                 #            #   sidebarPanel(
-                 #            #     actionButton(("button_n"), "Load Image / Save"),
-                 #            #     sliderInput(("int"), "Image Intensity:",1,500,100, step=5),
-                 #            #     downloadButton(("dl_training_N"), label="Save Classification File"),
-                 #            #     HTML('<script type="text/javascript">
-                 #            #     $(document).ready(function() {
-                 #            #     $("#button_n").click(function() {
-                 #            #     $("#neg_class_ui").text("Loading...");
-                 #            #     });
-                 #            #     });
-                 #            #          </script>')),
-                 #            #   mainPanel(
-                 #            #     uiOutput("neg_class_ui"))
-                 #            # ))
-                 # )),
-
 
 #' @import shiny
 golem_add_external_resources <- function(){
