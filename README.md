@@ -61,16 +61,59 @@ Notes:
 
 >>Classification
 1. Check "Upload Segmentation Parameters" if you want to upload the parameters (csv) file
-  - If file is not loaded, the parameters set during the Image Setup/Segmentation steps will be used. 
-2. Positive phenotype classification (tab panel)
-  - Determines model's ability to identify cells exhibiting "positive phenotype"
-  A. Select image files from training dataset that exhibit the phenotype of interest. Images with a single field that has both cells with both positive or negative phenotype can be used. 
+  - If file is not loaded, the parameters set during the Image Setup/Segmentation steps will be used.
+  
+>>>> You do not need to sequentially go through the Positive classification tab before the Negative, or vice versa. These can be performed in different sessions (assuming uploaded/previously set segmentation parameters) 
+>>>> BUT to create the model you will ultimately need two separate training files- one for positive, one for negative!
+
+>>> Positive phenotype classification (tab panel)
+- Determines model's ability to identify cells exhibiting "positive phenotype"
+  1. Select image files from training dataset that exhibit the phenotype of interest. Images with a single field that has both cells with both positive or negative phenotype can be used. 
     - Manually select multiple files using method for operating system (Windows, Mac)
-  B. After uploading files, click the "Load Image/Save" button once 
+  2. After uploading files, click the "Load Image" button once 
     - This button loads the first OR next image file (after first image has been loaded and used for selecting cells)
     - After loading the first image this button also temporarily* "saves" the selected cells for the first and subsequent loaded images
     * You MUST use "Save Classification File" to save these results to your local computer for subsequent model creation
-  C. After pressing "Load Image" button the first uploaded image will be displayed in main panel. The individual segmented cells are indicated with yellow outlines. 
+  3. After pressing "Load Image" button the first uploaded image will be displayed in main panel. The individual segmented cells are outlined in yellow
+    - Using cursor click on all the cells that exemplify the positive phenotype 
+    -- Click the middle of the outlined cell (for each cell choice)
+  4. After all desired cells in that image are selected, press "Load Image" again (once)
+    - This will load the next image file that was uploaded in step A
+    - Repeat steps 1-3 until there are no more images (Or when user desires)
+  5. Press "Save (+) Classification File" Save the training file with classification information 
+    - User can change name and file destination but MUST have '.rds' extension
+    
+>>> Negative phenotype classification (tab panel)
+  - Determines model's ability to identify cells not exhibiting phenotype (control/untreated)
+  1. Select image files containing all or a mix of negative phenotype cells
+  2. Repeat steps 2-4 described in "Positive" classification instructions
+  3. Press "Save (-) Classification File" 
+    - User can change name, must be '.rds'
+    - Save file in the same directory as the positive_training file. 
+    - You must have TWO training RDS files, one for positive, one for training
+
+>> Create Model 
+  1. Select both positive and negative training RDS files 
+    *They must be selected/uploaded together
+  2. After uploading the rds files: 
+    - Side panel shows the total number of classified cells found in positive and negative training files. 
+    - Main panel displays the PCA (principal component analysis) plot
+  3. Press the "Save Model File" button
+    - This will make a single RDS file containing model 
+
+>> Test model
+  1. Input three files: 
+    - Image (containing positive phenotype cells) to test the model on 
+    - Model file (rds) generated in create model step
+    - Parameters file (csv) for cell segmentation
+  2. Once all 3 required files are uploaded, the main panel will display the test image (phenotype channel) outlined in blue. 
+    - Blue outlined cells are the ones the model classifies as "positive"
+  3. Adjust the SVM decision value using slider to determine desired threshold for positive classification by model 
+  4. Press "Download Settings" to save a new parameters file that includes decision value
+    
+    
+  
+    
     
   
   
