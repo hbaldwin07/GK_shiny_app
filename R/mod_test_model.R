@@ -18,7 +18,7 @@ mod_test_model_ui <- function(id){
   tagList(
     sidebarLayout(
       sidebarPanel(
-        fileInput(ns("test_img"), label="Choose Test Image", multiple = TRUE),
+        fileInput(ns("test_img"), label="Choose Test Image", multiple = FALSE),
         fileInput(ns("rds_file"), label=("Load the Classification Model (rds) file")),
         fileInput(ns("csv_file"), label=("Load the Parameter (csv) file")),
         sliderInput(ns("dv"), label="SVM Decision Value", -5, 5, 0, step=0.1),
