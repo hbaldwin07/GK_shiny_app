@@ -21,6 +21,7 @@ Imports:
     shinyjs,
     e1071,
     pkgload,
+    outliers,
     shinyFeedback
 RoxygenNote: 7.1.0
 Suggests: 
