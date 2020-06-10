@@ -1,6 +1,8 @@
 # GK_shiny_app
 
 ### Package description / introduction 
+Application can be run online at:  https://hab-gk-app.shinyapps.io/gk_shiny_app/
+>> Due to server limitiations this is not recommended for large images (and/or large dataset of images)
 
 ### Instructions for local installation 
 

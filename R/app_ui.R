@@ -10,35 +10,35 @@ app_ui <- function() {
       tabsetPanel(
         tabPanel("Image Setup",
                  mod_img_setup_ui("img_setup_ui_1")
-                 ),
+        ),
         tabPanel("Segmentation",
-          tabsetPanel(
-            tabPanel("Nucleus Segmentation",
-                     sidebarLayout(
-                       sidebarPanel(
-                         mod_nuc_params_ui("nuc_params_ui_1")
-                       ),
-                       mainPanel(
-                         mod_n_segment_ui("n_segment_ui_1")
-                       )
-                     )),
-            tabPanel("Cell Segmentation",
-                     sidebarLayout(
-                       sidebarPanel(
-                         mod_ph_params_ui("ph_params_ui_1")              
-                       ),
-                       mainPanel(
-                         mod_ph_segment_ui("ph_segment_ui_1")
-                       )
-                     )), 
-            tabPanel("Save Image Parameters",
-                     mod_dl_params_ui("dl_params_ui_1")
-            ))
+                 tabsetPanel(
+                   tabPanel("Nucleus Segmentation",
+                            sidebarLayout(
+                              sidebarPanel(
+                                mod_nuc_params_ui("nuc_params_ui_1")
+                              ),
+                              mainPanel(
+                                mod_n_segment_ui("n_segment_ui_1")
+                              )
+                            )),
+                   tabPanel("Cell Segmentation",
+                            sidebarLayout(
+                              sidebarPanel(
+                                mod_ph_params_ui("ph_params_ui_1")              
+                              ),
+                              mainPanel(
+                                mod_ph_segment_ui("ph_segment_ui_1")
+                              )
+                            )), 
+                   tabPanel("Save Image Parameters",
+                            mod_dl_params_ui("dl_params_ui_1")
+                   ))
         ),
         tabPanel("Image Classification",
                  shinyWidgets::dropdownButton(
                    checkboxInput("up_par", label = "Upload Segmentation Parameters?", value=FALSE),
-                   uiOutput("params_ui"), size = "sm",
+                   uiOutput("params_ui"), size = "sm", 
                    circle = TRUE, status = "danger", icon = icon("exclamation-triangle"), width = "200px",
                    inline = TRUE, tooltip = TRUE, label = "Parameter Settings"
                  ),
@@ -70,17 +70,17 @@ app_ui <- function() {
                                 mod_classify_loop_ui("mod_classify_loop_ui_2")
                               )
                             )
-                   )
-                 )
-        ),
-        tabPanel("Create Model",
-                 mod_create_model_ui("create_model_ui_1")
-                 ),
-        tabPanel("Test Model", 
-                 mod_test_model_ui("test_model_ui_1"))
+        )
       )
-    )
-    )
+    ),
+    tabPanel("Create Model",
+             mod_create_model_ui("create_model_ui_1")
+    ),
+    tabPanel("Test Model", 
+             mod_test_model_ui("test_model_ui_1"))
+  )
+  )
+)
 }
 
 #' @import shiny

@@ -3,3 +3,4 @@
 ^app\.R$
 ^rsconnect$
 ^Dockerfile$
+^data-raw$
