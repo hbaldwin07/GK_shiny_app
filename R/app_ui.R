@@ -6,7 +6,7 @@ app_ui <- function() {
     golem_add_external_resources(),
     # List the first level UI elements here 
     fluidPage(
-      h1("SVM Cell Classification Model"),
+      h1("AI-PS...SVM..."),
       tabsetPanel(
         tabPanel("Image Setup",
                  mod_img_setup_ui("img_setup_ui_1")
