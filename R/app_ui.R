@@ -66,7 +66,7 @@ app_ui <- function() {
                                 downloadButton(("dl_training_N"),label="Save (-) Classification File"),
                               ),
                               mainPanel(
-                                h4("Select Nositive Cells"),
+                                h4("Select Negative Cells"),
                                 mod_classify_loop_ui("mod_classify_loop_ui_2")
                               )
                             )
