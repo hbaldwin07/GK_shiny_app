@@ -70,7 +70,7 @@ mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
     seg = paintObjects(nseg(),toRGB(dapi_norm()),opac=c(1, 1),col=c("red",NA), thick=TRUE, closed=TRUE)
   })
   output$dapi_normal <- renderPlot({
-    plot(dapi_norm()*params()$nuc_int)
+    plot(dapi_norm())
     #mtext("Nucleus Channel", side=3, cex=1.5)
   })
   output$mask <- renderPlot({
