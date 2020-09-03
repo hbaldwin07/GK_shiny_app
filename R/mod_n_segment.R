@@ -17,6 +17,9 @@ mod_n_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
+      checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
+    ),
+    fluidRow(
       column(6, plotOutput(ns("dapi_normal"))),
       column(6, plotOutput(ns("mask")))
     ),
@@ -53,7 +56,11 @@ mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
   })
   nseg <- reactive({
     size_s <- params()$nuc_size_s
-    nmask = bwlabel(nmask2())
+    if (input$bool_seg) {
+      nmask = watershed(nmask2())
+    } else {
+      nmask = bwlabel(nmask2())
+    }
     nf = computeFeatures.shape(nmask)
     nr = which(nf[,2] < size_s)
     nseg = rmObjects(nmask, nr)
