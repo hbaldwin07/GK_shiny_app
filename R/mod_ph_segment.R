@@ -94,25 +94,25 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
   # })
   output$mask <- renderPlot({
     plot(cmask())
-    #mtext("Mask:", side=3, line=1, cex=1.5)
-    #mtext("Individual Cells", side=3)
+    mtext("Mask:", side=3, line=1, cex=1.5)
+    mtext("Individual Cells", side=3)
   })
   output$omask <- renderPlot({
     plot(omask())
-    #mtext("Mask:", side=3, line=1, cex=1.5)
-    #mtext("Global Outline", side=3)
+    mtext("Mask:", side=3, line=1, cex=1.5)
+    mtext("Global Outline", side=3)
   })
   output$color <- renderPlot({
     plot(colorLabels(cell_seg()))
-    #mtext("Final Seg", side=3, line=1, cex=1.25)
-    #mtext("Color Label", side=3)
+    mtext("Final Seg", side=3, line=1, cex=1.25)
+    mtext("Color Label", side=3)
   })
   output$outline <- renderPlot({
     seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     #plot(seg_out())
     plot(seg_out)
-    #mtext("Final Seg", side=3, line=1, cex=1.25)
-    #mtext("Outline", side=3)
+    mtext("Final Seg", side=3, line=1, cex=1.25)
+    mtext("Outline", side=3)
   })
   
   return(cell_seg)
