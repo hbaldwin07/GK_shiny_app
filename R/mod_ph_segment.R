@@ -24,6 +24,7 @@ mod_ph_segment_ui <- function(id){
       column(6, plotOutput(ns("omask")))
     ),
     #fluidRow(h4("Final Segmentation")),
+    br(),
     fluidRow(
       column(6, plotOutput(ns("color"))),
       column(6, plotOutput(ns("outline")))
@@ -42,12 +43,10 @@ mod_ph_segment_ui <- function(id){
 mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, nseg){
   ns <- session$ns
   cell_norm <- reactive({
-    #browser()
     cell_norm= ph_norm()*params()$ph_int
   })
   
   cmask <- reactive({
-    #browser()
     filter <- as.numeric(params()$ph_filter)
     wh <- as.numeric(params()$ph_wh)
     gm <- as.numeric(params()$ph_gm)

@@ -71,6 +71,7 @@ mod_test_model_server <- function(input, output, session, r){
   nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=reactive(dapi_norm()), params=reactive(param()))
   
   new_nseg = reactive({
+    #browser()
     check = computeFeatures.shape(nseg())
     int.dapi = computeFeatures.basic(nseg(), dapi_norm())
     y=which(outliers::scores(int.dapi[,1], type="z", prob=0.95))

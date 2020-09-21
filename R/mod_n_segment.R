@@ -1,5 +1,5 @@
 # Module UI
-  
+
 #' @title   mod_n_segment_ui and mod_n_segment_server
 #' @description  A shiny Module.
 #'
@@ -20,54 +20,30 @@ mod_n_segment_ui <- function(id){
     #   checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
     # ),
     fluidRow(
-      column(6, 
-             h5("Nucleus Channel", align="center"),
-             plotOutput(ns("dapi_normal"))
-      ),
-      column(6, 
-             h5("Mask", align="center"),
-             plotOutput(ns("mask"))
+      splitLayout(
+        h5("Nucleus Channel", align="center"),
+        plotOutput(ns("dapi_normal")),
+        h5("Mask", align="center"),
+        plotOutput(ns("mask"))
       )
     ),
     fluidRow(
-      column(6, 
-             h5("Segmented: color masks", align="center"),
-             plotOutput(ns("color"))
-      ),
-      column(6, 
-             h5("Segmented: img outline", align="center"),
-             plotOutput(ns("outline"))
+      splitLayout(
+        h5("Segmented: color masks", align="center"),
+        plotOutput(ns("color")),
+        h5("Segmented: img outline", align="center"),
+        plotOutput(ns("outline"))
       )
     )
-
-  
-    
-    
-    # fluidRow(
-    #   checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
-    # ),
-    # br(),
-  
-    # fluidRow(
-    #   column(6, 
-    #          #h6("Nucleus Channel"),
-    #          plotOutput(ns("dapi_normal"))),
-    #   column(6, plotOutput(ns("mask")))
-    # ),
-    # br(),
-    # fluidRow(
-    #   column(6, plotOutput(ns("color"))),
-    #   column(6, plotOutput(ns("outline")))
-    # )
   )
 }
-    
+
 # Module Server
-    
+
 #' @rdname mod_n_segment
 #' @export
 #' @keywords internal
-    
+
 mod_n_segment_server <- function(input, output, session, params, nuc_norm){
   ns <- session$ns
   
@@ -88,12 +64,13 @@ mod_n_segment_server <- function(input, output, session, params, nuc_norm){
   })
   nseg <- reactive({
     size_s <- params()$nuc_size_s
-    # if (input$bool_seg) {
-    #   nmask = watershed(nmask2())
-    # } else {
-    #   nmask = bwlabel(nmask2())
-    # }
-    nmask = bwlabel(nmask2())
+    ws = params()$WS
+    if (ws == TRUE) {
+      nmask = watershed(nmask2())
+    } else {
+      nmask = bwlabel(nmask2())
+    }
+    #nmask = bwlabel(nmask2())
     nf = computeFeatures.shape(nmask)
     nr = which(nf[,2] < size_s)
     nseg = rmObjects(nmask, nr)
@@ -126,10 +103,10 @@ mod_n_segment_server <- function(input, output, session, params, nuc_norm){
   })
   return(nseg)
 }
-    
+
 ## To be copied in the UI
 # mod_n_segment_ui("n_segment_ui_1")
-    
+
 ## To be copied in the server
 # callModule(mod_n_segment_server, "n_segment_ui_1")
- 
+
