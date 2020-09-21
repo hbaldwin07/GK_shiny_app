@@ -5,6 +5,11 @@ Application can be run online at:  https://hab-gk-app.shinyapps.io/gk_shiny_app/
 >> Due to server limitiations this is not recommended for large images (and/or large dataset of images)
 
 ### Instructions for local installation 
+Download SVMshiny_0.0.0.9000.tgz file. 
+In command line run: R CMD INSTALL SVMshiny_0.0.0.9000.tgz
+Open R (or Rstudio) and type this into console: 
+>>> library (SVMshiny) 
+run_app()
 
 ### Data management tips 
 * Separate your data into two sets (with equal proportion of each class): Training, Test
