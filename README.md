@@ -11,14 +11,6 @@ Download SVMshiny_0.0.0.9000.tgz file. In command line run:
 Open R (or Rstudio) and type this into console: 
 >> library (SVMshiny)  
 >> run_app()
-<<<<<<< HEAD
-=======
-
-Download SVMshiny_0.0.0.9000.tgz file. In command line run: R CMD INSTALL SVMshiny_0.0.0.9000.tgz.  
-Open R (or Rstudio) and type this into console: 
-> library (SVMshiny)  
-> run_app()
->>>>>>> b6d3e840c863822c11c6bcd0164b4b9f50d962c7
 
 ### Data management tips 
 * Separate your data into two sets (with equal proportion of each class): Training, Test
