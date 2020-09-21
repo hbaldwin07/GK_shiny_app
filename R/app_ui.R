@@ -2,8 +2,6 @@
 #' @import EBImage
 app_ui <- function() {
   tagList(
-    # Leave this function for adding external resources
-    golem_add_external_resources(),
     # List the first level UI elements here 
     fluidPage(
       h1("AI-PS...SVM..."),
@@ -14,14 +12,17 @@ app_ui <- function() {
         tabPanel("Segmentation",
                  tabsetPanel(
                    tabPanel("Nucleus Segmentation",
-                            sidebarLayout(
-                              sidebarPanel(
-                                mod_nuc_params_ui("nuc_params_ui_1")
-                              ),
-                              mainPanel(
-                                mod_n_segment_ui("n_segment_ui_1")
-                              )
-                            )),
+                            column(4, mod_nuc_params_ui("nuc_params_ui_1")),
+                            column(8, mod_n_segment_ui("n_segment_ui_1"))),
+                            
+                            # sidebarLayout(
+                            #   sidebarPanel(
+                            #     mod_nuc_params_ui("nuc_params_ui_1")
+                            #   ),
+                            #   mainPanel(
+                            #     mod_n_segment_ui("n_segment_ui_1")
+                            #   )
+                            # )),
                    tabPanel("Cell Segmentation",
                             sidebarLayout(
                               sidebarPanel(
@@ -84,18 +85,18 @@ app_ui <- function() {
 }
 
 #' @import shiny
-golem_add_external_resources <- function(){
-  
-  addResourcePath(
-    'www', system.file('app/www', package = 'SVMshiny')
-  )
-  
-  tags$head(
-    golem::activate_js(),
-    #golem::favicon()
-    # Add here all the external resources
-    # If you have a custom.css in the inst/app/www
-    # Or for example, you can add shinyalert::useShinyalert() here
-    #tags$link(rel="stylesheet", type="text/css", href="www/custom.css")
-  )
-}
+# golem_add_external_resources <- function(){
+#   
+#   addResourcePath(
+#     'www', system.file('app/www', package = 'SVMshiny')
+#   )
+#   
+#   tags$head(
+#     golem::activate_js(),
+#     #golem::favicon()
+#     # Add here all the external resources
+#     # If you have a custom.css in the inst/app/www
+#     # Or for example, you can add shinyalert::useShinyalert() here
+#     #tags$link(rel="stylesheet", type="text/css", href="www/custom.css")
+#   )
+# }
