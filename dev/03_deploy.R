@@ -8,16 +8,16 @@ devtools::test()
 # 5. Deployment elements
 
 ## 5.1 If you want to deploy on RStudio related platforms
-golem::add_rstudioconnect_file()
+#golem::add_rstudioconnect_file()
 golem::add_shinyappsio_file()
-golem::add_shinyserver_file()
+#golem::add_shinyserver_file()
 # 
-# getOption("repos")
-# #BiocManager::repositories()
-# #library(BiocManager)
-# #install.packages("BiocManager")
-# options(repos = BiocManager::repositories())
-# #BiocManager::repositories()
+getOption("repos")
+#BiocManager::repositories()
+library(BiocManager)
+#install.packages("BiocManager")
+options(repos = BiocManager::repositories())
+#BiocManager::repositories()
 # 
 # ## 5.2 If you want to deploy via a generic Dockerfile
 # golem::add_dockerfile(

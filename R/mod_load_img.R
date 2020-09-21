@@ -28,19 +28,14 @@ mod_load_img_ui <- function(id){
 mod_load_img_server <- function(input, output, session, r, ix){
   ns <- session$ns
   
-  # observeEvent(r$img_dir$files, {
-  #   files = r$img_dir$files
-  #   browser()
-  # })
-  
-  img = reactive({
-    files = r$img_dir$files
-    i = ix()
-    f = files[i,]
-    if (is.null(f))
-      return(NULL)
-    readImage(f$datapath, all=T)
-  })
+ img = reactive({
+  files = r$img_dir$files
+  i = ix()
+  f = files[i,]
+  if (is.null(f))
+    return(NULL)
+  readImage(f$datapath, all=T)
+})
   return(img)
   
   # path = reactive({

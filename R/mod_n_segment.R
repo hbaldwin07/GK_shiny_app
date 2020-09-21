@@ -19,10 +19,12 @@ mod_n_segment_ui <- function(id){
     fluidRow(
       checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
     ),
+    br(),
     fluidRow(
       column(6, plotOutput(ns("dapi_normal"))),
       column(6, plotOutput(ns("mask")))
     ),
+    br(),
     fluidRow(
       column(6, plotOutput(ns("color"))),
       column(6, plotOutput(ns("outline")))
