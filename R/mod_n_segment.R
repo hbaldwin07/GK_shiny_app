@@ -16,19 +16,49 @@
 mod_n_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
-    fluidRow(
+    wellPanel(
       checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
     ),
-    br(),
     fluidRow(
-      column(6, plotOutput(ns("dapi_normal"))),
-      column(6, plotOutput(ns("mask")))
+      column(6, 
+             h5("Nucleus Channel", align="center"),
+             plotOutput(ns("dapi_normal"))
+      ),
+      column(6, 
+             h5("Mask", align="center"),
+             plotOutput(ns("mask"))
+      )
     ),
-    br(),
     fluidRow(
-      column(6, plotOutput(ns("color"))),
-      column(6, plotOutput(ns("outline")))
+      column(6, 
+             h5("Segmented: color masks", align="center"),
+             plotOutput(ns("color"))
+      ),
+      column(6, 
+             h5("Segmented: img outline", align="center"),
+             plotOutput(ns("outline"))
+      )
     )
+
+  
+    
+    
+    # fluidRow(
+    #   checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
+    # ),
+    # br(),
+  
+    # fluidRow(
+    #   column(6, 
+    #          #h6("Nucleus Channel"),
+    #          plotOutput(ns("dapi_normal"))),
+    #   column(6, plotOutput(ns("mask")))
+    # ),
+    # br(),
+    # fluidRow(
+    #   column(6, plotOutput(ns("color"))),
+    #   column(6, plotOutput(ns("outline")))
+    # )
   )
 }
     
@@ -72,22 +102,26 @@ mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
     seg = paintObjects(nseg(),toRGB(dapi_norm()),opac=c(1, 1),col=c("red",NA), thick=TRUE, closed=TRUE)
   })
   output$dapi_normal <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(dapi_norm())
-    mtext("Nucleus Channel", side=3, cex=1.5)
+    #mtext("Nucleus Channel", side=3, cex=1.5, line=1, outer=TRUE)
   })
   output$mask <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(nmask2())
-    mtext("Mask", side=3, cex=1.5)
+    #mtext("Nucleus Mask", side=3, cex=1.5, outer=TRUE)
   })
   output$color <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(colorLabels(nseg()))
-    mtext("Final Seg", side=3, line=1, cex=1.5)
-    mtext("Color Label", side=3)
+    #mtext("Final Seg", side=3, line=1, cex=1.5)
+    #mtext("Color Label", side=3)
   })
   output$outline <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(seg())
-    mtext("Final Seg", side=3, line=1, cex=1.5)
-    mtext("Outline", side=3)
+    #mtext("Final Seg", side=3, line=1, cex=1.5)
+    #mtext("Outline", side=3)
   })
   return(nseg)
 }

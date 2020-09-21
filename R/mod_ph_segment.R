@@ -17,20 +17,42 @@ mod_ph_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      # column(4, plotOutput(ns("cell_norm"))),
-      # column(4, plotOutput(ns("mask"))),
-      # column(4, plotOutput(ns("omask")))
-      column(6, plotOutput(ns("mask"))),
-      column(6, plotOutput(ns("omask")))
+      column(6, 
+             h5("Local Mask", align="center"),
+             plotOutput(ns("mask"))
+      ),
+      column(6, 
+             h5("Global Mask", align="center"),
+             plotOutput(ns("omask"))
+      )
     ),
-    #fluidRow(h4("Final Segmentation")),
     fluidRow(
-      column(6, plotOutput(ns("color"))),
-      column(6, plotOutput(ns("outline")))
-             #, br(), 
-             #sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
+      column(6, 
+             h5("Segmented: color masks", align="center"),
+             plotOutput(ns("color"))
+      ),
+      column(6, 
+             h5("Segmented: img outline", align="center"),
+             plotOutput(ns("outline"))
+      )
+    )
   )
-  )
+    
+  #   fluidRow(
+  #     # column(4, plotOutput(ns("cell_norm"))),
+  #     # column(4, plotOutput(ns("mask"))),
+  #     # column(4, plotOutput(ns("omask")))
+  #     column(6, plotOutput(ns("mask"))),
+  #     column(6, plotOutput(ns("omask")))
+  #   ),
+  #   #fluidRow(h4("Final Segmentation")),
+  #   fluidRow(
+  #     column(6, plotOutput(ns("color"))),
+  #     column(6, plotOutput(ns("outline")))
+  #            #, br(), 
+  #            #sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
+  # )
+  # )
 }
     
 # Module Server
