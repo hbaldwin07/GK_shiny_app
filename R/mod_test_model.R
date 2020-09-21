@@ -93,7 +93,7 @@ mod_test_model_server <- function(input, output, session, r){
   new_cseg = callModule(mod_ph_segment_server, "ph_segment_ui_a", ph_norm=reactive(ph_norm()), params=reactive(param()), nseg=reactive(new_nseg()), r)
   
   table_test =  reactive({
-    browser()
+    #browser()
     table_test_shape = computeFeatures.shape(new_cseg(),ph_norm())
     table_test_moment = computeFeatures.moment(new_cseg(),ph_norm())
     table_test_basic = computeFeatures.basic(new_cseg(),ph_norm())
@@ -104,7 +104,7 @@ mod_test_model_server <- function(input, output, session, r){
     #browser()
     ll.temp = list()
     rownametable= row.names(table_test())
-    browser()
+    #browser()
     table_test= data.frame(cbind(rownametable,table_test()))
     Ts.mix = table_test[,2:12]
     rownametable2 = table_test[,1]
