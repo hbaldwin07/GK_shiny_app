@@ -17,9 +17,6 @@ mod_nuc_params_ui <- function(id){
   ns <- NS(id)
   tagList(
     wellPanel(
-      
-    ),
-    wellPanel(
       actionButton(ns("reset_input"),"Reset inputs"),
       br(),
       h5("Segmentation method:"),
