@@ -16,9 +16,9 @@
 mod_n_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
-    wellPanel(
-      checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
-    ),
+    # wellPanel(
+    #   checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
+    # ),
     fluidRow(
       column(6, 
              h5("Nucleus Channel", align="center"),
@@ -68,7 +68,7 @@ mod_n_segment_ui <- function(id){
 #' @export
 #' @keywords internal
     
-mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
+mod_n_segment_server <- function(input, output, session, params, nuc_norm){
   ns <- session$ns
   
   dapi_norm <- reactive({
@@ -88,11 +88,12 @@ mod_n_segment_server <- function(input, output, session, r, params, nuc_norm){
   })
   nseg <- reactive({
     size_s <- params()$nuc_size_s
-    if (input$bool_seg) {
-      nmask = watershed(nmask2())
-    } else {
-      nmask = bwlabel(nmask2())
-    }
+    # if (input$bool_seg) {
+    #   nmask = watershed(nmask2())
+    # } else {
+    #   nmask = bwlabel(nmask2())
+    # }
+    nmask = bwlabel(nmask2())
     nf = computeFeatures.shape(nmask)
     nr = which(nf[,2] < size_s)
     nseg = rmObjects(nmask, nr)

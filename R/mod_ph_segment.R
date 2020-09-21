@@ -1,5 +1,5 @@
 # Module UI
-  
+
 #' @title   mod_ph_segment_ui and mod_ph_segment_server
 #' @description  A shiny Module.
 #'
@@ -17,57 +17,35 @@ mod_ph_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      column(6, 
-             h5("Local Mask", align="center"),
-             plotOutput(ns("mask"))
-      ),
-      column(6, 
-             h5("Global Mask", align="center"),
-             plotOutput(ns("omask"))
-      )
+      # column(4, plotOutput(ns("cell_norm"))),
+      # column(4, plotOutput(ns("mask"))),
+      # column(4, plotOutput(ns("omask")))
+      column(6, plotOutput(ns("mask"))),
+      column(6, plotOutput(ns("omask")))
     ),
+    #fluidRow(h4("Final Segmentation")),
     fluidRow(
-      column(6, 
-             h5("Segmented: color masks", align="center"),
-             plotOutput(ns("color"))
-      ),
-      column(6, 
-             h5("Segmented: img outline", align="center"),
-             plotOutput(ns("outline"))
-      )
+      column(6, plotOutput(ns("color"))),
+      column(6, plotOutput(ns("outline")))
+      #, br(), 
+      #sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
     )
   )
-    
-  #   fluidRow(
-  #     # column(4, plotOutput(ns("cell_norm"))),
-  #     # column(4, plotOutput(ns("mask"))),
-  #     # column(4, plotOutput(ns("omask")))
-  #     column(6, plotOutput(ns("mask"))),
-  #     column(6, plotOutput(ns("omask")))
-  #   ),
-  #   #fluidRow(h4("Final Segmentation")),
-  #   fluidRow(
-  #     column(6, plotOutput(ns("color"))),
-  #     column(6, plotOutput(ns("outline")))
-  #            #, br(), 
-  #            #sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
-  # )
-  # )
 }
-    
+
 # Module Server
-    
+
 #' @rdname mod_ph_segment
 #' @export
 #' @keywords internal
-    
+
 mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, nseg){
   ns <- session$ns
   cell_norm <- reactive({
     #browser()
     cell_norm= ph_norm()*params()$ph_int
   })
-
+  
   cmask <- reactive({
     #browser()
     filter <- as.numeric(params()$ph_filter)
@@ -139,10 +117,9 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
   
   return(cell_seg)
 }
-    
+
 ## To be copied in the UI
 # mod_ph_segment_ui("ph_segment_ui_1")
-    
+
 ## To be copied in the server
 # callModule(mod_ph_segment_server, "ph_segment_ui_1")
- 
