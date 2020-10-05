@@ -15,7 +15,7 @@ golem::add_shinyappsio_file()
 getOption("repos")
 #BiocManager::repositories()
 library(BiocManager)
-#install.packages("BiocManager")
+install.packages("BiocManager")
 options(repos = BiocManager::repositories())
 #BiocManager::repositories()
 # 

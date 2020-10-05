@@ -51,12 +51,10 @@ mod_n_segment_server <- function(input, output, session, params, nuc_norm, r){
   ns <- session$ns
   
   dapi_norm <- reactive({
-    #browser()
     dapi_norm= nuc_norm()*params()$nuc_int
   })
   
   nmask2 <- reactive({
-    #browser()
     wh <- as.numeric(params()$nuc_wh)
     gm <- as.numeric(params()$nuc_gm)
     filter <- as.numeric(params()$nuc_filter)
@@ -73,7 +71,6 @@ mod_n_segment_server <- function(input, output, session, params, nuc_norm, r){
     } else {
       nmask = bwlabel(nmask2())
     }
-    #nmask = bwlabel(nmask2())
     nf = computeFeatures.shape(nmask)
     nr = which(nf[,2] < size_s)
     nseg = rmObjects(nmask, nr)

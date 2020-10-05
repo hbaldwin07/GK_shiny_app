@@ -29,16 +29,6 @@ mod_nuc_params_ui <- function(id){
       sliderInput(ns("filter"),"Detect nuclei edges:",1,99,13,step=2),
       sliderInput(ns("size_s"),"Remove small objects:",1,500,30,step=1)
     )
-    #br(),
-    # fluidRow(
-    #   h4("Segmentation Parameters"),
-    #   actionButton(ns("reset_input"),"Reset inputs"),
-    #   sliderInput(ns("int"), "Image Intensity:", 1,500,100, step=5),
-    #   sliderInput(ns("wh"),"Threshold size:",1,200,100,step=1),
-    #   sliderInput(ns("gm"),"Threshold offset:",0.0001,0.1,0.002,step=0.001),
-    #   sliderInput(ns("filter"),"Detect nuclei edges:",1,99,13,step=2),
-    #   sliderInput(ns("size_s"),"Remove small objects:",1,500,30,step=1)
-    # )
   )
 }
 
