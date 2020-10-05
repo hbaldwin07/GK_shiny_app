@@ -12,8 +12,8 @@ app_ui <- function() {
         tabPanel("Segmentation",
                  tabsetPanel(
                    tabPanel("Nucleus Segmentation",
-                            column(4, mod_nuc_params_ui("nuc_params_ui_1")),
-                            column(8, mod_n_segment_ui("n_segment_ui_1"))),
+                            column(3, mod_nuc_params_ui("nuc_params_ui_1")),
+                            column(9, mod_n_segment_ui("n_segment_ui_1"))),
                             
                             # sidebarLayout(
                             #   sidebarPanel(
@@ -24,6 +24,7 @@ app_ui <- function() {
                             #   )
                             # )),
                    tabPanel("Cell Segmentation",
+                            
                             sidebarLayout(
                               sidebarPanel(
                                 mod_ph_params_ui("ph_params_ui_1")              

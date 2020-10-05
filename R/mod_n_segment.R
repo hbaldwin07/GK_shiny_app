@@ -16,25 +16,28 @@
 mod_n_segment_ui <- function(id){
   ns <- NS(id)
   tagList(
-    # wellPanel(
-    #   checkboxInput(ns("bool_seg"), "Use watershed algorithm for segmentation? (Default: binary segmentation")
-    # ),
+
     fluidRow(
-      splitLayout(
-        h5("Nucleus Channel", align="center"),
-        plotOutput(ns("dapi_normal")),
-        h5("Mask", align="center"),
-        plotOutput(ns("mask"))
-      )
-    ),
-    fluidRow(
-      splitLayout(
-        h5("Segmented: color masks", align="center"),
-        plotOutput(ns("color")),
-        h5("Segmented: img outline", align="center"),
-        plotOutput(ns("outline"))
-      )
-    )
+      column(6, 
+             h5("Nucleus Channel", align="center"),
+             plotOutput(ns("dapi_normal"))
+             ),
+      column(6, 
+             h5("Mask", align="center"),
+             plotOutput(ns("mask"))
+             )
+   ),
+   br(),
+   fluidRow(
+     column(6, 
+            h5("Final Seg: color masks", align="center"),
+            plotOutput(ns("color"))
+     ),
+     column(6, 
+            h5("Final Seg: overlay", align="center"),
+            plotOutput(ns("outline"))
+     )
+   )
   )
 }
 

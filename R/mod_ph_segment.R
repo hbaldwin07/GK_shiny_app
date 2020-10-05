@@ -20,13 +20,17 @@ mod_ph_segment_ui <- function(id){
       # column(4, plotOutput(ns("cell_norm"))),
       # column(4, plotOutput(ns("mask"))),
       # column(4, plotOutput(ns("omask")))
+      h5("Local Mask", align="center"),
       column(6, plotOutput(ns("mask"))),
+      h5("Global Mask", align="center"),
       column(6, plotOutput(ns("omask")))
     ),
     #fluidRow(h4("Final Segmentation")),
     br(),
     fluidRow(
+      h5("Final Seg: color masks", align="center"),
       column(6, plotOutput(ns("color"))),
+      h5("Final Seg: overaly", align="center"),
       column(6, plotOutput(ns("outline")))
       #, br(), 
       #sliderInput(ns("int"), "Image Intensity:", 1,100,10, step=5)))
@@ -92,21 +96,25 @@ mod_ph_segment_server <- function(input, output, session, r, params, ph_norm, ns
   #   #mtext("Phenotype Channel", side=3, cex=1.5)
   # })
   output$mask <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(cmask())
     mtext("Mask:", side=3, line=1, cex=1.5)
     mtext("Individual Cells", side=3)
   })
   output$omask <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(omask())
     mtext("Mask:", side=3, line=1, cex=1.5)
     mtext("Global Outline", side=3)
   })
   output$color <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     plot(colorLabels(cell_seg()))
     mtext("Final Seg", side=3, line=1, cex=1.25)
     mtext("Color Label", side=3)
   })
   output$outline <- renderPlot({
+    par(mar=c(3, 3, 3, 3))
     seg_out = paintObjects(cell_seg(),toRGB(cell_norm()),opac=c(1, 1),col=c("yellow",NA),thick=TRUE,closed=TRUE)
     #plot(seg_out())
     plot(seg_out)
