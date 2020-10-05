@@ -7,7 +7,7 @@
 \usage{
 mod_n_segment_ui(id)
 
-mod_n_segment_server(input, output, session, params, nuc_norm)
+mod_n_segment_server(input, output, session, params, nuc_norm, r)
 }
 \arguments{
 \item{id}{shiny id}

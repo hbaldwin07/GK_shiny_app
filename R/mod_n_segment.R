@@ -47,7 +47,7 @@ mod_n_segment_ui <- function(id){
 #' @export
 #' @keywords internal
 
-mod_n_segment_server <- function(input, output, session, params, nuc_norm){
+mod_n_segment_server <- function(input, output, session, params, nuc_norm, r){
   ns <- session$ns
   
   dapi_norm <- reactive({
