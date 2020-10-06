@@ -78,7 +78,6 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   
   xy <- reactive({
     xy <- computeFeatures.moment(cell_seg())[,c('m.cx','m.cy')]
-    #xy <- computeFeatures.moment(cell_seg)[,c('m.cx','m.cy')]
   })
   
   rds_training <- reactive({
@@ -99,9 +98,6 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   })
   
   table_test <- reactive({
-    # table_test_shape = computeFeatures.shape(cell_seg,ph_norm)
-    # table_test_moment = computeFeatures.moment(cell_seg,ph_norm)
-    # table_test_basic = computeFeatures.basic(cell_seg,ph_norm)
     table_test_shape = computeFeatures.shape(cell_seg(),ph_norm())
     table_test_moment = computeFeatures.moment(cell_seg(),ph_norm())
     table_test_basic = computeFeatures.basic(cell_seg(),ph_norm())
@@ -111,37 +107,6 @@ mod_classify_server <- function(input, output, session, r, img, cell_seg, ph_nor
   })
   
   return(rds_training)
-  
-  #modvalues <- reactiveValues(new_rows=NULL)
-  #count = 0
-  
-  # n_classified = reactive({
-  #   total = nrow(rds_training())
-  #   n_c = which(rds_training()$predict == 0)
-  #   n_classified = total-length(n_c)
-  # })
-  # 
-  
-  # observeEvent(r$button, {
-  #   count <<- count + 1
-  #   if (count > 1) {
-  #     modvalues$new_rows <- data.frame(rds_training())
-  #   }
-  # })
-  
-  # observeEvent(r$button, {
-  #   count = count + 1
-  #   if (count > 1) {
-  #     modvalues$new_rows = data.frame(rds_training())
-  #   }
-  # })
-  
-  #return(reactive({modvalues$new_rows}))
-  
-  # output$table = renderTable({
-  #   rds_training()
-  # })
-  # return(rds_training)
 }
 
 ## To be copied in the UI

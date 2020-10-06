@@ -44,13 +44,17 @@ mod_create_model_server <- function(input, output, session, r){
   
   observeEvent(input$files, {
     rds_files = input$files
-    f1 = rds_files[1,]
-    f2 = rds_files[2,]
     #browser()
+    f1 = rds_files[,4]
     Ts.training_sum <- reactive({
-      rds1 = readRDS(f1$datapath)
-      rds2 = readRDS(f2$datapath)
-      Ts.training_sum = rbind(rds1, rds2)
+    Ts.temp<-NULL
+      for (i in 1:length(f1)){
+          #browser()
+          rds1 = readRDS(f1[i])
+          Ts.temp<-rbind(Ts.temp,rds1)
+          rm(rds1)
+      }
+      Ts.training_sum = Ts.temp
     })
     pos_n <- reactive({
       length(which(Ts.training_sum()$predict=="P"))})
@@ -61,7 +65,7 @@ mod_create_model_server <- function(input, output, session, r){
     output$neg_n <- renderText({neg_n()})
 
     Ts.training <- reactive({
-      #browser()
+      
       Ts.training_sum = Ts.training_sum()
       #Ts.training_sum <- Ts.training_sum()[!duplicated(Ts.training_sum()[c("b.sd", "b.mad")]),]
       ind <- which(!Ts.training_sum$predict=="0")

@@ -71,7 +71,6 @@ mod_test_model_server <- function(input, output, session, r){
   nseg = callModule(mod_n_segment_server, "n_segment_ui_a", nuc_norm=reactive(dapi_norm()), params=reactive(param()))
   
   new_nseg = reactive({
-    #browser()
     check = computeFeatures.shape(nseg())
     int.dapi = computeFeatures.basic(nseg(), dapi_norm())
     y=which(outliers::scores(int.dapi[,1], type="z", prob=0.95))
@@ -145,9 +144,16 @@ mod_test_model_server <- function(input, output, session, r){
     ll.temp$segpos = seg_pos
     cseg_pos = ll.temp
   })
+  # pos_out = reactive({
+  #   seg_selected = cseg_pos()$segpos
+  #   ph_n = var.list()$ph_norm
+  #   pos_out = paintObjects(seg_selected, toRGB(ph_n*input$int), opac=c(1,0.8),col=c("Green",NA),thick=TRUE,closed=FALSE)
+  # })
   pos_out = reactive({
     seg_selected = cseg_pos()$segpos
     ph_n = var.list()$ph_norm
+    colorMode(seg_selected)<-"Grayscale"
+    colorMode(ph_n)<-"Grayscale"
     pos_out = paintObjects(seg_selected, toRGB(ph_n*input$int), opac=c(1,0.8),col=c("Green",NA),thick=TRUE,closed=FALSE)
   })
   
